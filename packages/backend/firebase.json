@@ -4,8 +4,9 @@
         "indexes": "firestore.indexes.json"
     },
     "functions": {
-        "predeploy": "yarn --cwd \"$RESOURCE_DIR\" build",
-        "source": "."
+        "predeploy": "pnpm --dir \"$RESOURCE_DIR\" build",
+        "source": ".",
+        "isolate": true
     },
     "emulators": {
         "singleProjectMode": true,

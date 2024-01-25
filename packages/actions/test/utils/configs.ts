@@ -67,7 +67,7 @@ export const initializeUserServices = (): {
     const auth = getAuth(userApp)
     const userFirestore = envType === TestingEnvironment.PRODUCTION ? getFirestore(userApp) : getFirestore()
     const userFunctions =
-        envType === TestingEnvironment.PRODUCTION ? getFunctions(userApp) : getFunctions(getApp(), "europe-west1")
+        envType === TestingEnvironment.PRODUCTION ? getFunctions(userApp) : getFunctions(getApp(), "us-central1")
 
     if (envType === TestingEnvironment.DEVELOPMENT) {
         // Connect the emulator for dev environment (default endpoints).

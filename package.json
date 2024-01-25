@@ -6,6 +6,7 @@
     "bugs": "https://github.com/privacy-scaling-explorations/p0tion/issues",
     "license": "MIT",
     "private": true,
+    "packageManager": "pnpm@8.6.1",
     "keywords": [
         "typescript",
         "zero-knowledge",
@@ -16,9 +17,8 @@
         "snarkjs",
         "circom"
     ],
-    "packageManager": "yarn@3.5.1",
     "scripts": {
-        "build": "yarn workspaces foreach -t run build",
+        "build": "pnpm run --recursive build",
         "test": "yarn test:dev",
         "test:firebase-emulator": "NODE_ENV=dev yarn workspace @p0tion/backend emulator:exec-test",
         "test:prod": "yarn workspace @p0tion/actions test:contracts && GOOGLE_APPLICATION_CREDENTIALS=\"./packages/backend/serviceAccountKey.json\" && NODE_ENV=prod jest --config=jest.json --detectOpenHandles --forceExit --runInBand",

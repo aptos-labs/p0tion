@@ -4,8 +4,8 @@
         "baseUrl": ".",
         "declaration": true,
         "declarationDir": "dist/types",
-        "moduleResolution": "Node16"
+        "moduleResolution": "Node16",
+        "typeRoots": ["node_modules/@types", "../../types"]
     },
-    "include": ["src"],
-    "files": ["./hardhat.config.ts"]
+    "include": ["src"]
 }
