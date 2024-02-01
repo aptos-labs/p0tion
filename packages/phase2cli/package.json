@@ -30,7 +30,8 @@
         "circom"
     ],
     "scripts": {
-        "build": "rimraf dist && rollup -c rollup.config.ts --configPlugin typescript",
+        "cli": "tsx src/index.ts",
+        "build": "echo \"no build step required\"",
         "build:watch": "rollup -c rollup.config.ts -w --configPlugin typescript",
         "start": "ts-node --esm ./src/index.ts",
         "auth": "yarn start auth",
@@ -92,6 +93,7 @@
         "rollup": "^3.21.6",
         "snarkjs": "^0.6.11",
         "timer-node": "^5.0.7",
+        "tsx": "^4.7.0",
         "winston": "^3.8.2"
     },
     "publishConfig": {

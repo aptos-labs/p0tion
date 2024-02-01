@@ -1,4 +1,6 @@
-import fetch from "@adobe/node-fetch-retry"
+import adobeFetch from "@adobe/node-fetch-retry"
+
+const fetch = adobeFetch.default
 /**
  * This function queries the GitHub API to fetch users statistics
  * @param user {string} the user uid

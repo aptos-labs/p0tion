@@ -5,14 +5,14 @@ import {
     ParticipantStatus,
     ParticipantContributionStep,
     CircuitContributionVerificationMechanism
-} from "../../src/types/enums"
+} from "../../src/types/enums.js"
 import {
     generateFakeUser,
     generateFakeCeremony,
     generateFakeParticipant,
     generateFakeCircuit,
     generateFakeContribution
-} from "./generators"
+} from "./generators.js"
 
 const fakeUser1 = generateFakeUser({
     uid: "0000000000000000000000000001",

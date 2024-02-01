@@ -28,3 +28,6 @@ docs/*
 
 
 *.env
+
+*.r1cs
+*.wasm

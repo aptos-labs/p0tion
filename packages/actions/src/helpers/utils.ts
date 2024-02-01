@@ -1,7 +1,7 @@
 import { Firestore } from "firebase/firestore"
 import fs, { ReadPosition, createWriteStream } from "fs"
 import winston, { Logger } from "winston"
-import fetch from "@adobe/node-fetch-retry"
+import adobeFetch from "@adobe/node-fetch-retry"
 import { pipeline } from "stream"
 import { promisify } from "util"
 import {
@@ -16,22 +16,24 @@ import {
     CeremonySetupTemplateCircuitArtifacts,
     StringifiedBigInts,
     BigIntVariants
-} from "../types/index"
-import { finalContributionIndex, genesisZkeyIndex, potFilenameTemplate } from "./constants"
+} from "../types/index.js"
+import { finalContributionIndex, genesisZkeyIndex, potFilenameTemplate } from "./constants.js"
 import {
     getCircuitContributionsFromContributor,
     getDocumentById,
     getCircuitsCollectionPath,
     getContributionsCollectionPath
-} from "./database"
-import { CeremonyTimeoutType } from "../types/enums"
+} from "./database.js"
+import { CeremonyTimeoutType } from "../types/enums.js"
 import {
     getPotStorageFilePath,
     getR1csStorageFilePath,
     getWasmStorageFilePath,
     getZkeyStorageFilePath
-} from "./storage"
-import { blake512FromPath } from "./crypto"
+} from "./storage.js"
+import { blake512FromPath } from "./crypto.js"
+
+const fetch = adobeFetch.default
 
 /**
  * Return a string with double digits if the provided input is one digit only.

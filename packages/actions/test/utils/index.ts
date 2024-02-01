@@ -5,7 +5,7 @@ export {
     getStorageConfiguration,
     getAuthenticationConfiguration,
     deleteAdminApp
-} from "./configs"
+} from "./configs.js"
 export {
     createMockCeremony,
     cleanUpRecursively,
@@ -25,7 +25,7 @@ export {
     uploadFileToS3,
     getTranscriptLocalFilePath,
     storeMockDoneParticipant
-} from "./storage"
+} from "./storage.js"
 export {
     createMockUser,
     cleanUpMockUsers,
@@ -34,4 +34,4 @@ export {
     setCustomClaims,
     sleep,
     generatePseudoRandomStringOfNumbers
-} from "./authentication"
+} from "./authentication.js"

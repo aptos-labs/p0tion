@@ -69,7 +69,7 @@
         "@aws-sdk/middleware-endpoint": "^3.329.0",
         "@aws-sdk/s3-request-presigner": "^3.329.0",
         "@google-cloud/functions-framework": "^3.3.0",
-        "@p0tion/actions": "latest",
+        "@p0tion/actions": "1.1.1",
         "@types/mime-types": "^2.1.4",
         "blakejs": "^1.2.1",
         "dotenv": "^16.0.3",

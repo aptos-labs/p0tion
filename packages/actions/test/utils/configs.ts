@@ -4,7 +4,7 @@ import { FirebaseApp, getApp, initializeApp } from "firebase/app"
 import { connectFirestoreEmulator, Firestore, getFirestore } from "firebase/firestore"
 import { connectFunctionsEmulator, Functions, getFunctions } from "firebase/functions"
 import { connectAuthEmulator, getAuth } from "firebase/auth"
-import { TestingEnvironment } from "../../src/types/enums"
+import { TestingEnvironment } from "../../src/types/enums.js"
 
 dotenv.config({ path: `${__dirname}/../../.env` })
 

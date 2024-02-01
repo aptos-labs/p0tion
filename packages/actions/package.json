@@ -6,15 +6,10 @@
     "homepage": "https://github.com/privacy-scaling-explorations/p0tion",
     "bugs": "https://github.com/privacy-scaling-explorations/p0tion/issues",
     "license": "MIT",
-    "exports": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.node.js",
-        "types": "./dist/types/src/index.d.ts"
-    },
-    "main": "dist/index.node.js",
-    "types": "dist/types/src/index.d.ts",
+    "exports": "./dist/index.js",
+    "type": "module",
     "engines": {
-        "node": ">=16.14.0"
+        "node": ">=18.14.0"
     },
     "files": [
         "dist/",
@@ -31,7 +26,7 @@
         "circom"
     ],
     "scripts": {
-        "build": "rimraf dist && rollup -c rollup.config.ts --configPlugin typescript",
+        "build": "rimraf dist && tsc --project tsconfig.json",
         "build:watch": "rollup -c rollup.config.ts -w --configPlugin typescript",
         "pre:publish": "yarn build",
         "compile:contracts": "hardhat compile",
@@ -50,14 +45,14 @@
         "chai": "^4.3.7",
         "chai-as-promised": "^7.1.1",
         "cli-progress": "^3.12.0",
-        "dotenv": "^16.0.3",
+        "dotenv": "^16.4.1",
         "ethers": "^5.7.2",
-        "firebase": "^9.21.0",
-        "firebase-admin": "^11.8.0",
+        "firebase": "^10.7.2",
+        "firebase-admin": "^12.0.0",
         "googleapis": "^118.0.0",
         "mime-types": "^2.1.35",
-        "rimraf": "^5.0.0",
-        "rollup": "^3.21.6",
+        "rimraf": "^5.0.5",
+        "rollup": "^4.9.6",
         "snarkjs": "^0.6.11",
         "solc": "^0.8.19"
     },
@@ -66,17 +61,18 @@
         "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
         "@nomiclabs/hardhat-ethers": "^2.2.3",
         "@typechain/ethers-v5": "^10.2.1",
-        "@typechain/hardhat": "^6.1.6",
-        "@types/cli-progress": "^3.11.0",
+        "@typechain/hardhat": "^9.1.0",
+        "@types/cli-progress": "^3.11.5",
         "@types/mime-types": "^2.1.4",
-        "@types/mocha": "^10.0.1",
-        "@types/rollup-plugin-auto-external": "^2.0.2",
+        "@types/mocha": "^10.0.6",
+        "@types/rollup-plugin-auto-external": "^2.0.5",
         "hardhat": "^2.14.0",
         "rollup-plugin-auto-external": "^2.0.0",
         "rollup-plugin-cleanup": "^3.2.1",
-        "rollup-plugin-typescript2": "^0.34.1",
+        "rollup-plugin-typescript2": "^0.36.0",
         "ts-node": "^10.9.1",
-        "typescript": "^5.0.4",
+        "tslib": "^2.6.2",
+        "typescript": "^5.3.3",
         "winston": "^3.8.2"
     },
     "publishConfig": {

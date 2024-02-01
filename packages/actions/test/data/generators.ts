@@ -4,7 +4,7 @@ import {
     ParticipantDocumentReferenceAndData,
     CircuitDocumentReferenceAndData,
     ContributionDocumentReferenceAndData
-} from "../../src/types/index"
+} from "../../src/types/index.js"
 
 /**
  * Create a fake user document (`users` collection).

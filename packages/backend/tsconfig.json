@@ -2,9 +2,9 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "baseUrl": ".",
-        "skipLibCheck": true,
         "moduleResolution": "Node16",
-        "outDir": "dist"
+        "outDir": "dist",
+        "esModuleInterop": true
     },
     "include": ["src/**/*", "test/**/*", "rollup.config.ts"]
 }

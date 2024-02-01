@@ -2,8 +2,8 @@ import { google } from "googleapis"
 import { createUserWithEmailAndPassword, getAuth, UserCredential } from "firebase/auth"
 import { FirebaseApp } from "firebase/app"
 import { Auth } from "firebase-admin/auth"
-import { getCurrentFirebaseAuthUser } from "../../src/index"
-import { UserDocumentReferenceAndData } from "../../src/types/index"
+import { getCurrentFirebaseAuthUser } from "../../src/index.js"
+import { UserDocumentReferenceAndData } from "../../src/types/index.js"
 
 /**
  * Sleeps the function execution for given millis.

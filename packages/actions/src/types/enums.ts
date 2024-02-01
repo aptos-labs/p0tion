@@ -7,7 +7,7 @@
  * - CLOSED: when the contribution period has finished.
  * - FINALIZED: when the ceremony finalization has been properly completed.
  */
-export const enum CeremonyState {
+export enum CeremonyState {
     SCHEDULED = "SCHEDULED",
     OPENED = "OPENED",
     PAUSED = "PAUSED",
@@ -21,7 +21,7 @@ export const enum CeremonyState {
  * - PHASE1: when the ceremony is a Phase 1 Trusted Setup ceremony.
  * - PHASE2: when the ceremony is a Phase 2 Trusted Setup ceremony.
  */
-export const enum CeremonyType {
+export enum CeremonyType {
     PHASE1 = "PHASE1",
     PHASE2 = "PHASE2"
 }
@@ -40,7 +40,7 @@ export const enum CeremonyType {
  * - TIMEDOUT: when the participant has been timedout while contributing. This may happen due to network or memory issues, un/intentional crash, or contributions lasting for too long.
  * - EXHUMED: when the participant is ready to resume the contribution after a timeout expiration.
  */
-export const enum ParticipantStatus {
+export enum ParticipantStatus {
     CREATED = "CREATED",
     WAITING = "WAITING",
     READY = "READY",
@@ -62,7 +62,7 @@ export const enum ParticipantStatus {
  * - VERIFYING: when the participant is waiting from verification results from the coordinator.
  * - COMPLETED: when the participant has received the verification results from the coordinator and completed the contribution steps.
  */
-export const enum ParticipantContributionStep {
+export enum ParticipantContributionStep {
     DOWNLOADING = "DOWNLOADING",
     COMPUTING = "COMPUTING",
     UPLOADING = "UPLOADING",
@@ -76,7 +76,7 @@ export const enum ParticipantContributionStep {
  * - BLOCKING_CONTRIBUTION: when the current contributor was blocking the waiting queue.
  * - BLOCKING_CLOUD_FUNCTION: when the contribution verification has gone beyond the time limit.
  */
-export const enum TimeoutType {
+export enum TimeoutType {
     BLOCKING_CONTRIBUTION = "BLOCKING_CONTRIBUTION",
     BLOCKING_CLOUD_FUNCTION = "BLOCKING_CLOUD_FUNCTION"
 }
@@ -87,7 +87,7 @@ export const enum TimeoutType {
  * - DYNAMIC: self-update approach based on latest contribution time.
  * - FIXED: approach based on a fixed amount of time.
  */
-export const enum CeremonyTimeoutType {
+export enum CeremonyTimeoutType {
     DYNAMIC = "DYNAMIC",
     FIXED = "FIXED"
 }
@@ -95,7 +95,7 @@ export const enum CeremonyTimeoutType {
 /**
  * Define request type for pre-signed urls.
  */
-export const enum RequestType {
+export enum RequestType {
     PUT = "PUT",
     GET = "GET"
 }
@@ -106,7 +106,7 @@ export const enum RequestType {
  * - DEVELOPMENT: tests are performed on the local Firebase emulator instance.
  * - PRODUCTION: tests are performed on the remote (deployed) Firebase application.
  */
-export const enum TestingEnvironment {
+export enum TestingEnvironment {
     DEVELOPMENT = "DEVELOPMENT",
     PRODUCTION = "PRODUCTION"
 }
@@ -117,7 +117,7 @@ export const enum TestingEnvironment {
  * - CF: Cloud Functions.
  * - VM: Virtual Machine.
  */
-export const enum CircuitContributionVerificationMechanism {
+export enum CircuitContributionVerificationMechanism {
     CF = "CF",
     VM = "VM"
 }
@@ -132,7 +132,7 @@ export const enum CircuitContributionVerificationMechanism {
  * - ST1: Throughput Optimized HDD volumes.
  * - SC1: Cold HDD volumes.
  */
-export const enum DiskTypeForVM {
+export enum DiskTypeForVM {
     GP2 = "gp2",
     GP3 = "gp3",
     IO1 = "io1",

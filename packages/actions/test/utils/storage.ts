@@ -4,17 +4,17 @@ import {
     CeremonyDocumentReferenceAndData,
     CircuitDocumentReferenceAndData,
     ParticipantDocumentReferenceAndData
-} from "../../src/types/index"
-import { ParticipantContributionStep, ParticipantStatus, TimeoutType } from "../../src/types/enums"
+} from "../../src/types/index.js"
+import { ParticipantContributionStep, ParticipantStatus, TimeoutType } from "../../src/types/enums.js"
 import {
     commonTerms,
     getCircuitsCollectionPath,
     getContributionsCollectionPath,
     getParticipantsCollectionPath,
     getTimeoutsCollectionPath
-} from "../../src/index"
-import { generateFakeParticipant } from "../data/generators"
-import { fakeCeremoniesData } from "../data/samples"
+} from "../../src/index.js"
+import { generateFakeParticipant } from "../data/generators.js"
+import { fakeCeremoniesData } from "../data/samples.js"
 
 /**
  * Create a new S3 Client object

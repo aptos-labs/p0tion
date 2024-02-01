@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
         "baseUrl": ".",
-        "target": "es2020",
-        "module": "ESNext",
+        "target": "es2021",
+        "module": "Node16",
         "moduleResolution": "Node16",
         "skipLibCheck": true,
-        "allowSyntheticDefaultImports": true
+        "esModuleInterop": true
     },
-    "include": ["src/**/*", "rollup.config.ts"]
+    "include": ["src/**/*"]
 }

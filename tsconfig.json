@@ -13,10 +13,7 @@
         "declarationMap": true,
         "allowSyntheticDefaultImports": true,
         "declarationDir": "types",
-        "typeRoots": ["node_modules/@types", "types"],
-        "paths": {
-            "@p0tion/*": ["packages/*/src"]
-        }
+        "typeRoots": ["node_modules/@types", "types"]
     },
     "ts-node": {
         "compilerOptions": {

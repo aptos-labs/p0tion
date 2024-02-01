@@ -13,9 +13,9 @@ import {
     Timestamp,
     where
 } from "firebase/firestore"
-import { CeremonyState } from "../types/enums"
-import { FirebaseDocumentInfo } from "../types/index"
-import { commonTerms } from "./constants"
+import { CeremonyState } from "../types/enums.js"
+import { FirebaseDocumentInfo } from "../types/index.js"
+import { commonTerms } from "./constants.js"
 
 /**
  * Get participants collection path for database reference.

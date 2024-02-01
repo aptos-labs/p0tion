@@ -9,7 +9,7 @@ export {
     getVerifierContractStorageFilePath,
     getTranscriptStorageFilePath,
     getWasmStorageFilePath
-} from "./helpers/storage"
+} from "./helpers/storage.js"
 export {
     queryCollection,
     fromQueryToFirebaseDocumentInfo,
@@ -24,7 +24,7 @@ export {
     getTimeoutsCollectionPath,
     getOpenedCeremonies,
     getCeremonyCircuits
-} from "./helpers/database"
+} from "./helpers/database.js"
 export {
     compareCeremonyArtifacts,
     downloadAllCeremonyArtifacts,
@@ -35,9 +35,9 @@ export {
     generateZkeyFromScratch,
     verifyGROTH16Proof,
     verifyZKey
-} from "./helpers/verification"
-export { initializeFirebaseCoreServices } from "./helpers/services"
-export { signInToFirebaseWithCredentials, getCurrentFirebaseAuthUser, isCoordinator } from "./helpers/authentication"
+} from "./helpers/verification.js"
+export { initializeFirebaseCoreServices } from "./helpers/services.js"
+export { signInToFirebaseWithCredentials, getCurrentFirebaseAuthUser, isCoordinator } from "./helpers/authentication.js"
 export {
     commonTerms,
     potFileDownloadMainUrl,
@@ -52,7 +52,7 @@ export {
     vmConfigurationTypes,
     vmBootstrapScriptFilename,
     powersOfTauFiles
-} from "./helpers/constants"
+} from "./helpers/constants.js"
 export {
     extractPrefix,
     extractPoTFromFilename,
@@ -69,7 +69,7 @@ export {
     computeSmallestPowersOfTauForCircuit,
     convertToDoubleDigits,
     parseCeremonyFile
-} from "./helpers/utils"
+} from "./helpers/utils.js"
 export {
     setupCeremony,
     checkParticipantForCeremony,
@@ -88,16 +88,16 @@ export {
     checkAndPrepareCoordinatorForFinalization,
     finalizeCircuit,
     finalizeCeremony
-} from "./helpers/functions"
-export { toHex, blake512FromPath, computeSHA256ToHex, compareHashes } from "./helpers/crypto"
+} from "./helpers/functions.js"
+export { toHex, blake512FromPath, computeSHA256ToHex, compareHashes } from "./helpers/crypto.js"
 export {
     compileContract,
     verifyCeremony,
     p256,
     verifyGROTH16ProofOnChain,
     formatSolidityCalldata
-} from "./helpers/contracts"
-export { githubReputation } from "./helpers/security"
+} from "./helpers/contracts.js"
+export { githubReputation } from "./helpers/security.js"
 export {
     CeremonyState,
     CeremonyType,
@@ -109,7 +109,7 @@ export {
     TestingEnvironment,
     CircuitContributionVerificationMechanism,
     DiskTypeForVM
-} from "./types/enums"
+} from "./types/enums.js"
 export {
     FirebaseDocumentInfo,
     ChunkWithUrl,
@@ -143,7 +143,7 @@ export {
     FirebaseServices,
     VMConfigurationType,
     AWSVariables
-} from "./types/index"
+} from "./types/index.js"
 export {
     createEC2Instance,
     terminateEC2Instance,
@@ -159,4 +159,4 @@ export {
     createEC2Client,
     vmContributionVerificationCommand,
     retrieveCommandStatus
-} from "./helpers/vm"
+} from "./helpers/vm.js"

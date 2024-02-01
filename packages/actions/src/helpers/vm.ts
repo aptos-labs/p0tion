@@ -15,11 +15,11 @@ import {
     SendCommandCommandInput
 } from "@aws-sdk/client-ssm"
 import dotenv from "dotenv"
-import { DiskTypeForVM } from "src"
-import { EC2Instance } from "../types"
-import { convertBytesOrKbToGb } from "./utils"
-import { ec2InstanceTag, powersOfTauFiles, vmBootstrapScriptFilename } from "./constants"
-import { getAWSVariables } from "./services"
+import type { DiskTypeForVM } from "../types/enums.js"
+import { EC2Instance } from "../types/index.js"
+import { convertBytesOrKbToGb } from "./utils.js"
+import { ec2InstanceTag, powersOfTauFiles, vmBootstrapScriptFilename } from "./constants.js"
+import { getAWSVariables } from "./services.js"
 
 dotenv.config()
 
