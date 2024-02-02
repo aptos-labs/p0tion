@@ -103,7 +103,7 @@ export const getInputDataToAddCircuitToCeremony = async (
         metadata.constraints,
         ceremonyTimeoutMechanismType,
         sameCircomCompiler,
-        !(metadata.constraints <= 1000000) // nb. we assume after our dry-runs that CF works fine for up to one million circuit constraints.
+        !(metadata.constraints <= 20000000) // nb. we assume after our dry-runs that CF works fine for up to one million circuit constraints.
     )
 
     process.stdout.write("\n")
