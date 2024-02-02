@@ -806,6 +806,7 @@ export const handleStartOrResumeContribution = async (
                     "Unfortunately there was an error with the contribution verification. Please restart phase2cli and try again. If the problem persists, please contact the ceremony coordinator."
                 )}\n`
             )
+            console.error(error)
         }
     }
 }
