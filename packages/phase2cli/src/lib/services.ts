@@ -27,7 +27,7 @@ dotenv.config({
  * Bootstrap services and configs is needed for a new command execution and related services.
  * @returns <Promise<FirebaseServices>>
  */
-export const bootstrapCommandExecutionAndServices = async (): Promise<any> => {
+export const bootstrapCommandExecutionAndServices = async () => {
     // Clean terminal window.
     clear()
 

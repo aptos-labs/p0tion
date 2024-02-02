@@ -33,7 +33,7 @@ import {
 } from "./storage.js"
 import { blake512FromPath } from "./crypto.js"
 
-const fetch = adobeFetch.default
+const fetch = adobeFetch as any as typeof adobeFetch.default
 
 /**
  * Return a string with double digits if the provided input is one digit only.
