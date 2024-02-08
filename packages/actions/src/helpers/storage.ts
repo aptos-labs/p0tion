@@ -4,8 +4,8 @@ import fs, { createWriteStream } from "fs"
 import fetch from "@adobe/node-fetch-retry"
 import https from "https"
 import { GenericBar } from "cli-progress"
-import { ETagWithPartNumber, ChunkWithUrl, TemporaryParticipantContributionData } from "../types/index.js"
-import { commonTerms } from "./constants.js"
+import { ETagWithPartNumber, ChunkWithUrl, TemporaryParticipantContributionData } from "../types/index"
+import { commonTerms } from "./constants"
 import {
     completeMultiPartUpload,
     generateGetObjectPreSignedUrl,
@@ -13,7 +13,7 @@ import {
     openMultiPartUpload,
     temporaryStoreCurrentContributionMultiPartUploadId,
     temporaryStoreCurrentContributionUploadedChunkData
-} from "./functions.js"
+} from "./functions"
 
 /**
  * Return the bucket name based on ceremony prefix.

@@ -11,16 +11,11 @@ import {
     getFinalContributionBeacon,
     verifyGROTH16Proof,
     verifyZKey
-} from "./verification.js"
-import { compareHashes } from "./crypto.js"
-import {
-    commonTerms,
-    finalContributionIndex,
-    verificationKeyAcronym,
-    verifierSmartContractAcronym
-} from "./constants.js"
-import { fromQueryToFirebaseDocumentInfo, queryCollection } from "./database.js"
-import { unstringifyBigInts } from "./utils.js"
+} from "./verification"
+import { compareHashes } from "./crypto"
+import { commonTerms, finalContributionIndex, verificationKeyAcronym, verifierSmartContractAcronym } from "./constants"
+import { fromQueryToFirebaseDocumentInfo, queryCollection } from "./database"
+import { unstringifyBigInts } from "./utils"
 
 /**
  * Formats part of a GROTH16 SNARK proof

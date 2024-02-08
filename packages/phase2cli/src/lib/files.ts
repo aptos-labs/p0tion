@@ -1,6 +1,4 @@
 import fs, { Dirent, Stats } from "fs"
-import path from "path"
-import { fileURLToPath } from "url"
 
 /**
  * Check a directory path.
@@ -90,13 +88,4 @@ export const checkAndMakeNewDirectoryIfNonexistent = (directoryLocalPath: string
  */
 export const writeLocalJsonFile = (filePath: string, data: JSON) => {
     fs.writeFileSync(filePath, JSON.stringify(data), "utf-8")
-}
-
-/**
- * Return the local current project directory name.
- * @returns <string> - the local project (e.g., dist/) directory name.
- */
-export const getLocalDirname = (): string => {
-    const filename = fileURLToPath(import.meta.url)
-    return path.dirname(filename)
 }

@@ -1,7 +1,7 @@
 import { Functions, httpsCallable, httpsCallableFromURL } from "firebase/functions"
 import { DocumentSnapshot, onSnapshot } from "firebase/firestore"
-import { CeremonyInputData, CircuitDocument, ETagWithPartNumber, FirebaseDocumentInfo } from "../types/index.js"
-import { commonTerms } from "./constants.js"
+import { CeremonyInputData, CircuitDocument, ETagWithPartNumber, FirebaseDocumentInfo } from "../types/index"
+import { commonTerms } from "./constants"
 
 /**
  * Setup a new ceremony by calling the related cloud function.

@@ -21,7 +21,6 @@ import {
     verifyContribution
 } from "@p0tion/actions"
 import { Presets, SingleBar } from "cli-progress"
-import dotenv from "dotenv"
 import { GithubAuthProvider, OAuthCredential } from "firebase/auth"
 import { DocumentData, Firestore } from "firebase/firestore"
 import { Functions } from "firebase/functions"
@@ -31,8 +30,6 @@ import ora, { Ora } from "ora"
 import { zKey } from "snarkjs"
 import { Timer } from "timer-node"
 import { Logger } from "winston"
-import { fileURLToPath } from "url"
-import { dirname } from "path"
 import { GithubGistFile, ProgressBarType, Timing } from "../types/index.js"
 import { COMMAND_ERRORS, CORE_SERVICES_ERRORS, showError, THIRD_PARTY_SERVICES_ERRORS } from "./errors.js"
 import { readFile } from "./files.js"
@@ -43,13 +40,6 @@ import {
     getTranscriptLocalFilePath
 } from "./localConfigs.js"
 import theme from "./theme.js"
-
-const packagePath = `${dirname(fileURLToPath(import.meta.url))}`
-dotenv.config({
-    path: packagePath.includes(`src/lib`)
-        ? `${dirname(fileURLToPath(import.meta.url))}/../../.env`
-        : `${dirname(fileURLToPath(import.meta.url))}/.env`
-})
 
 /**
  * Exchange the Github token for OAuth credential.

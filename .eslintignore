@@ -21,3 +21,5 @@ build/
 
 # gen types
 *.d.ts
+
+/packages/phase2cli/import-meta-url.js

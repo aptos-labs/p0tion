@@ -1,7 +1,7 @@
 import { FirebaseApp, FirebaseOptions, initializeApp } from "firebase/app" // ref https://firebase.google.com/docs/web/setup#access-firebase.
 import { Firestore, getFirestore } from "firebase/firestore"
 import { Functions, getFunctions } from "firebase/functions"
-import { AWSVariables, FirebaseServices } from "../types/index.js"
+import { AWSVariables, FirebaseServices } from "../types/index"
 
 /**
  * This method initialize a Firebase app if no other app has already been initialized.

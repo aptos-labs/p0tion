@@ -10,7 +10,6 @@ import {
     getVerificationKeyStorageFilePath,
     getBucketName,
     multiPartUpload,
-    getVerifierContractStorageFilePath,
     finalizeCeremony,
     generateValidContributionsAttestation,
     commonTerms,
@@ -18,15 +17,11 @@ import {
     computeSHA256ToHex,
     finalizeCircuit,
     verificationKeyAcronym,
-    verifierSmartContractAcronym,
-    exportVerifierContract,
     FirebaseDocumentInfo,
     exportVkey
 } from "@p0tion/actions"
 import { Functions } from "firebase/functions"
 import { Firestore } from "firebase/firestore"
-import { dirname } from "path"
-import { fileURLToPath } from "url"
 import { COMMAND_ERRORS, showError } from "../lib/errors.js"
 import {
     customSpinner,
@@ -41,7 +36,6 @@ import {
     getFinalAttestationLocalFilePath,
     getFinalZkeyLocalFilePath,
     getVerificationKeyLocalFilePath,
-    getVerifierContractLocalFilePath,
     localPaths
 } from "../lib/localConfigs.js"
 import theme from "../lib/theme.js"
@@ -86,54 +80,6 @@ export const handleVerificationKey = async (
     )
 
     spinner.succeed(`Verification key correctly saved on storage`)
-}
-
-/**
- * Derive and store on the ceremony bucket the Solidity Verifier smart contract for the given final contribution.
- * @param cloudFunctions <Functions> - the instance of the Firebase cloud functions for the application.
- * @param bucketName <string> - the name of the ceremony bucket.
- * @param finalZkeyLocalFilePath <string> - the local file path of the final zKey.
- * @param verifierContractLocalFilePath <string> - the local file path of the verifier smart contract.
- * @param verifierContractStorageFilePath <string> - the storage file path of the verifier smart contract.
- */
-export const handleVerifierSmartContract = async (
-    cloudFunctions: Functions,
-    bucketName: string,
-    finalZkeyLocalFilePath: string,
-    verifierContractLocalFilePath: string,
-    verifierContractStorageFilePath: string
-) => {
-    const spinner = customSpinner(`Extracting verifier contract...`, `clock`)
-    spinner.start()
-
-    // Verifier path.
-    const packagePath = `${dirname(fileURLToPath(import.meta.url))}`
-    const verifierPath = packagePath.includes(`src/commands`)
-        ? `${dirname(
-              fileURLToPath(import.meta.url)
-          )}/../../../../node_modules/snarkjs/templates/verifier_groth16.sol.ejs`
-        : `${dirname(fileURLToPath(import.meta.url))}/../node_modules/snarkjs/templates/verifier_groth16.sol.ejs`
-
-    // Export the Solidity verifier smart contract.
-    const verifierCode = await exportVerifierContract(finalZkeyLocalFilePath, verifierPath)
-
-    spinner.text = `Writing verifier smart contract...`
-
-    // Write the verification key locally.
-    writeFile(verifierContractLocalFilePath, verifierCode)
-
-    await sleep(3000) // workaround for file descriptor.
-
-    // Upload verifier smart contract to storage.
-    await multiPartUpload(
-        cloudFunctions,
-        bucketName,
-        verifierContractStorageFilePath,
-        verifierContractLocalFilePath,
-        Number(process.env.CONFIG_STREAM_CHUNK_SIZE_IN_MB)
-    )
-
-    spinner.succeed(`Verifier smart contract correctly saved on storage`)
 }
 
 /**
@@ -188,18 +134,11 @@ export const handleCircuitFinalization = async (
     const verificationKeyLocalFilePath = getVerificationKeyLocalFilePath(
         `${circuitPrefix}_${verificationKeyAcronym}.json`
     )
-    const verifierContractLocalFilePath = getVerifierContractLocalFilePath(
-        `${circuitPrefix}_${verifierSmartContractAcronym}.sol`
-    )
 
     // Prepare storage paths.
     const verificationKeyStorageFilePath = getVerificationKeyStorageFilePath(
         circuitPrefix,
         `${circuitPrefix}_${verificationKeyAcronym}.json`
-    )
-    const verifierContractStorageFilePath = getVerifierContractStorageFilePath(
-        circuitPrefix,
-        `${circuitPrefix}_${verifierSmartContractAcronym}.sol`
     )
 
     // Get ceremony bucket.
@@ -215,13 +154,13 @@ export const handleCircuitFinalization = async (
     )
 
     // Step (3 & 4).
-    await handleVerifierSmartContract(
-        cloudFunctions,
-        bucketName,
-        finalZkeyLocalFilePath,
-        verifierContractLocalFilePath,
-        verifierContractStorageFilePath
-    )
+    // await handleVerifierSmartContract(
+    //     cloudFunctions,
+    //     bucketName,
+    //     finalZkeyLocalFilePath,
+    //     verifierContractLocalFilePath,
+    //     verifierContractStorageFilePath
+    // )
 
     // Step (5).
     const spinner = customSpinner(`Wrapping up the finalization of the circuit...`, `clock`)

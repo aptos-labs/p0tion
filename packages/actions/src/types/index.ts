@@ -9,7 +9,7 @@ import {
     DiskTypeForVM,
     ParticipantContributionStep,
     ParticipantStatus
-} from "./enums.js"
+} from "./enums"
 
 /**
  * A shared type that groups all the AWS services variables.

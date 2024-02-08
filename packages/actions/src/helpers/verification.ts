@@ -9,8 +9,8 @@ import {
     verifierSmartContractAcronym,
     verificationKeyAcronym,
     solidityVersion
-} from "./constants.js"
-import { compareHashes } from "./crypto.js"
+} from "./constants"
+import { compareHashes } from "./crypto"
 import {
     downloadCeremonyArtifact,
     getBucketName,
@@ -18,15 +18,15 @@ import {
     getVerifierContractStorageFilePath,
     getWasmStorageFilePath,
     getZkeyStorageFilePath
-} from "./storage.js"
+} from "./storage"
 import {
     fromQueryToFirebaseDocumentInfo,
     getCeremonyCircuits,
     getCircuitContributionsFromContributor,
     queryCollection
-} from "./database.js"
-import { formatZkeyIndex } from "./utils.js"
-import { CeremonyArtifacts } from "../types/index.js"
+} from "./database"
+import { formatZkeyIndex } from "./utils"
+import { CeremonyArtifacts } from "../types/index"
 
 /**
  * Verify that a zKey is valid
