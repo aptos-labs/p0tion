@@ -14,10 +14,14 @@ import {
     validate,
     listCeremonies
 } from "./commands/index.js"
+import { fileURLToPath } from 'node:url'
+import path from 'node:path'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const {
     packageJson: { name, description, version }
-} = readPackageUpSync()
+} = readPackageUpSync({cwd: __dirname})
 
 const program = createCommand()
 

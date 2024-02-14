@@ -21,7 +21,7 @@ export const THIRD_PARTY_SERVICES_ERRORS = {
     GITHUB_NOT_AUTHENTICATED: `You are unable to execute the command since you have not authorized this device with your Github account.\n${
         theme.symbols.info
     } Please, run the ${theme.text.bold(
-        "phase2cli auth"
+        "zk-ceremony auth"
     )} command and make sure that your account meets the authentication criteria.`,
     GITHUB_GIST_PUBLICATION_FAILED: `Unable to publish the public attestation as gist making the request using your authenticated Github account. Please, verify that you have allowed the 'gist' access permission during the authentication step.`
 }

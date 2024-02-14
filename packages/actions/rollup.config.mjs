@@ -5,7 +5,7 @@ export default {
     output: {
         sourcemap: true,
         dir: "dist",
-        format: "cjs"
+        format: "esm"
     },
     plugins: [typescript()]
 }

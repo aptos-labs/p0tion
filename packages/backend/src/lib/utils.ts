@@ -25,7 +25,7 @@ import {
     CeremonyState,
     finalContributionIndex,
     CircuitDocument
-} from "@p0tion/actions"
+} from "@aptos-labs/zk-actions"
 import fetch from "@adobe/node-fetch-retry"
 import path from "path"
 import os from "os"

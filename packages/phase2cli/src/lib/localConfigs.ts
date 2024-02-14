@@ -1,9 +1,15 @@
-import { commonTerms } from "@p0tion/actions"
+import { commonTerms } from "@aptos-labs/zk-actions"
 import Conf from "conf"
-import { readPackageSync } from "read-pkg"
+import { readPackageUpSync } from "read-package-up"
+import { fileURLToPath } from "node:url"
+import path from "node:path"
 
 // Get npm package name.
-const { name } = readPackageSync()
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+export const {
+    packageJson: { name }
+} = readPackageUpSync({ cwd: __dirname })
 
 /**
  * Local Storage.

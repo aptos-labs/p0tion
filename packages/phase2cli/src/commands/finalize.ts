@@ -19,7 +19,7 @@ import {
     verificationKeyAcronym,
     FirebaseDocumentInfo,
     exportVkey
-} from "@p0tion/actions"
+} from "@aptos-labs/zk-actions"
 import { Functions } from "firebase/functions"
 import { Firestore } from "firebase/firestore"
 import { COMMAND_ERRORS, showError } from "../lib/errors.js"

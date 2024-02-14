@@ -37,7 +37,7 @@ import {
     createCustomLoggerForFile,
     retrieveCommandStatus,
     stopEC2Instance
-} from "@p0tion/actions"
+} from "@aptos-labs/zk-actions"
 import { zKey } from "snarkjs"
 import { CommandInvocationStatus, SSMClient } from "@aws-sdk/client-ssm"
 import { EC2Client } from "@aws-sdk/client-ec2"

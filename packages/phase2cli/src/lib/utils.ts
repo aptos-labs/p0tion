@@ -19,7 +19,7 @@ import {
     permanentlyStoreCurrentContributionTimeAndHash,
     progressToNextContributionStep,
     verifyContribution
-} from "@p0tion/actions"
+} from "@aptos-labs/zk-actions"
 import { Presets, SingleBar } from "cli-progress"
 import { GithubAuthProvider, OAuthCredential } from "firebase/auth"
 import { DocumentData, Firestore } from "firebase/firestore"
@@ -308,7 +308,7 @@ export const generateCustomUrlToTweetAboutParticipation = (
               ceremonyName.toLowerCase().includes("ceremony")
                   ? "!"
                   : "%20Phase%202%20Trusted%20Setup%20ceremony!"
-          }%20You%20can%20view%20my%20final%20attestation%20here:%20${gistUrl}%20#Ethereum%20#ZKP%20#PSE`
+          }%20You%20can%20view%20my%20final%20attestation%20here:%20${gistUrl}%20#Aptos%20#ZKP%20#PSE`
         : `https://twitter.com/intent/tweet?text=I%20contributed%20to%20the%20${ceremonyName}${
               ceremonyName.toLowerCase().includes("trusted") ||
               ceremonyName.toLowerCase().includes("setup") ||
@@ -316,7 +316,7 @@ export const generateCustomUrlToTweetAboutParticipation = (
               ceremonyName.toLowerCase().includes("ceremony")
                   ? "!"
                   : "%20Phase%202%20Trusted%20Setup%20ceremony!"
-          }%20You%20can%20view%20the%20steps%20to%20contribute%20here:%20https://ceremony.pse.dev%20You%20can%20view%20my%20attestation%20here:%20${gistUrl}%20#Ethereum%20#ZKP`
+          }%20You%20can%20view%20my%20attestation%20here:%20${gistUrl}%20#Aptos%20#ZKP`
 
 /**
  * Return a custom progress bar.
@@ -775,7 +775,7 @@ export const handleStartOrResumeContribution = async (
                           )}`
                       )})\n${
                           theme.symbols.warning
-                      } This step can take up to one hour based on circuit size. Everything's fine, just be patient.`
+                      } This step can take up to 15 minutes based on circuit size. Everything's fine, just be patient.`
                     : ``
             }`
         )
@@ -793,7 +793,7 @@ export const handleStartOrResumeContribution = async (
         } catch (error: any) {
             process.stdout.write(
                 `\n${theme.symbols.error} ${theme.text.bold(
-                    "Unfortunately there was an error with the contribution verification. Please restart phase2cli and try again. If the problem persists, please contact the ceremony coordinator."
+                    "Unfortunately there was an error with the contribution verification. Please restart zk-ceremony and try again. If the problem persists, please contact the ceremony coordinator."
                 )}\n`
             )
             console.error(error)

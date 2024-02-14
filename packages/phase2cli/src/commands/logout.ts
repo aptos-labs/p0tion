@@ -24,7 +24,7 @@ const logout = async () => {
             `${
                 theme.symbols.warning
             } The logout could sign you out from Firebase and will delete the access token saved locally on this machine. Therefore, you have to run ${theme.text.bold(
-                "phase2cli auth"
+                "zk-ceremony auth"
             )} to authenticate again.\n${
                 theme.symbols.info
             } Remember, we cannot revoke the authorization from your Github account from this CLI! You can do this manually as reported in the official Github documentation ${

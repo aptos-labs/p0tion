@@ -1,11 +1,12 @@
 {
-    "name": "@p0tion/actions",
-    "version": "1.1.1",
+    "name": "@aptos-labs/zk-actions",
+    "version": "0.0.1",
     "description": "A set of actions and helpers for CLI commands",
     "repository": "git@github.com:privacy-scaling-explorations/p0tion.git",
     "homepage": "https://github.com/privacy-scaling-explorations/p0tion",
     "bugs": "https://github.com/privacy-scaling-explorations/p0tion/issues",
     "license": "MIT",
+    "type": "module",
     "main": "./dist/index.js",
     "exports": "./dist/index.js",
     "types": "./dist/index.d.ts",
@@ -27,8 +28,8 @@
         "circom"
     ],
     "scripts": {
-        "build:rollup": "rimraf dist && rollup -c rollup.config.mjs src/index.ts",
-        "build": "rimraf dist && tsc --project tsconfig.json",
+        "build": "rimraf dist && rollup -c rollup.config.mjs src/index.ts",
+        "build:tsc": "rimraf dist && tsc --project tsconfig.json",
         "build:watch": "tsc --project tsconfig.json --watch",
         "pre:publish": "yarn build",
         "compile:contracts": "hardhat compile",
@@ -43,7 +44,6 @@
         "@aws-sdk/client-ssm": "^3.358.0",
         "@octokit/auth-oauth-device": "^4.0.4",
         "@rollup/plugin-typescript": "^11.1.0",
-        "@types/winston": "^2.4.4",
         "blakejs": "^1.2.1",
         "chai": "^4.3.7",
         "chai-as-promised": "^7.1.1",

@@ -7,7 +7,7 @@ import {
     getOpenedCeremonies,
     isCoordinator,
     convertToDoubleDigits
-} from "@p0tion/actions"
+} from "@aptos-labs/zk-actions"
 import { Firestore } from "firebase/firestore"
 import logSymbols from "log-symbols"
 import readline from "readline"

@@ -2,8 +2,8 @@
     "compilerOptions": {
         "baseUrl": ".",
         "target": "es2021",
-        "module": "Node16",
-        "moduleResolution": "Node16",
+        "module": "ES2020",
+        "moduleResolution": "Bundler",
         "skipLibCheck": true,
         "esModuleInterop": true
     },

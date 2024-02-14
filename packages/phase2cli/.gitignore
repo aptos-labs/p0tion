@@ -6,7 +6,7 @@ yarn-error.log
 
 # environment
 env.json
-.env
+!.env
 
 # build
 dist/

@@ -2,7 +2,7 @@ import {
     getCurrentFirebaseAuthUser,
     initializeFirebaseCoreServices,
     signInToFirebaseWithCredentials
-} from "@p0tion/actions"
+} from "@aptos-labs/zk-actions"
 import clear from "clear"
 import figlet from "figlet"
 import { FirebaseApp } from "firebase/app"
@@ -22,7 +22,7 @@ export const bootstrapCommandExecutionAndServices = async () => {
     clear()
 
     // Print header.
-    console.log(theme.colors.magenta(figlet.textSync("Phase 2 cli", { font: "Ogre" })))
+    console.log(theme.colors.magenta(figlet.textSync("Aptos ZK Ceremony", { font: "Ogre" })))
 
     // Check configs.
     if (!process.env.AUTH_GITHUB_CLIENT_ID) showError(CONFIG_ERRORS.CONFIG_GITHUB_ERROR, true)

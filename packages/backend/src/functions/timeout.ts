@@ -9,7 +9,7 @@ import {
     ParticipantStatus,
     getTimeoutsCollectionPath,
     commonTerms
-} from "@p0tion/actions"
+} from "@aptos-labs/zk-actions"
 import {
     getCeremonyCircuits,
     getCurrentServerTimestampInMillis,
