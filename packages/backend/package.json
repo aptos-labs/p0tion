@@ -7,10 +7,10 @@
     "bugs": "https://github.com/privacy-scaling-explorations/p0tion/issues",
     "license": "MIT",
     "private": true,
-    "main": "./dist/src/functions/index.js",
+    "main": "./dist/index.cjs.js",
     "exports": {
-        "import": "./dist/src/functions/index.mjs",
-        "require": "./dist/src/functions/index.js"
+        "require": "./dist/index.cjs.js",
+        "default": "./dist/index.cjs.js"
     },
     "types": "dist/types/types/index.d.ts",
     "engines": {
@@ -33,14 +33,14 @@
         "circom"
     ],
     "scripts": {
-        "build": "rimraf dist && rollup -c rollup.config.ts --configPlugin typescript",
+        "build": "rimraf dist && rollup -c rollup.config.mjs src/functions/index.ts",
         "build:watch": "rollup -c rollup.config.ts -w --configPlugin typescript",
         "firebase:login": "firebase login",
         "firebase:logout": "firebase logout",
         "firebase:init": "firebase init",
-        "firebase:deploy": "yarn firestore:get-indexes && firebase deploy --project prod",
+        "firebase:deploy": "yarn firestore:get-indexes && firebase deploy --project dev",
         "firebase:deploy:dev": "firebase deploy --project dev",
-        "firebase:deploy-functions": "firebase deploy --only functions --project prod",
+        "firebase:deploy-functions": "firebase deploy --only functions --project dev",
         "firebase:deploy-firestore": "yarn firestore:get-indexes && firebase deploy --only firestore --project prod",
         "firebase:log-functions": "firebase functions:log --project prod",
         "firestore:get-indexes": "firebase firestore:indexes --project prod > firestore.indexes.json",
@@ -70,7 +70,7 @@
         "@aws-sdk/middleware-endpoint": "^3.329.0",
         "@aws-sdk/s3-request-presigner": "^3.329.0",
         "@google-cloud/functions-framework": "^3.3.0",
-        "@aptos-labs/zk-actions": "0.0.1",
+        "@aptos-labs/zk-actions": "0.0.2",
         "@types/mime-types": "^2.1.4",
         "blakejs": "^1.2.1",
         "dotenv": "^16.0.3",
@@ -82,7 +82,6 @@
         "rimraf": "^5.0.0",
         "rollup": "^3.21.6",
         "snarkjs": "^0.6.11",
-        "solc": "^0.8.19",
         "timer-node": "^5.0.7",
         "uuid": "^9.0.0",
         "winston": "^3.8.2"

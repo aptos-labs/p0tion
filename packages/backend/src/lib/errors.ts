@@ -189,7 +189,22 @@ export const SPECIFIC_ERRORS = {
         "unavailable",
         "VM command execution has failed due to an unknown status code",
         "Please, contact the coordinator if this error persists."
-    )
+    ),
+    SE_INVALID_INVITE_CODE: makeError(
+        "invalid-argument",
+        "Invalid invite code",
+        "The invite code provided does not exist."
+    ),
+    SE_INVITE_CODE_ALREADY_USED: makeError(
+        "failed-precondition",
+        "Invite code already used",
+        "The invite code provided has already been used by another user."
+    ),
+    SE_USER_HAS_NOT_ACTIVATED_INVITE_CODE: makeError(
+        "failed-precondition",
+        "Invite code not activated",
+        "The user has not activated a valid invite code yet. Please re-run the `auth` command"
+    ),
 }
 
 /**

@@ -436,3 +436,11 @@ export const finalizeCeremony = async (functions: Functions, ceremonyId: string)
         ceremonyId
     })
 }
+
+export const useInviteEmail = async (functions: Functions, data: { inviteEmail: string }) => {
+    const cf = httpsCallable(functions, commonTerms.cloudFunctionsNames.useInviteEmail)
+
+    const { data: inviteEmailResponse } = await cf(data)
+
+    return inviteEmailResponse
+}

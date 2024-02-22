@@ -51,6 +51,9 @@ export const checkParticipantForCeremony = functions
     .https.onCall(async (data: { ceremonyId: string }, context: functions.https.CallableContext) => {
         if (!context.auth || (!context.auth.token.participant && !context.auth.token.coordinator))
             logAndThrowError(SPECIFIC_ERRORS.SE_AUTH_NO_CURRENT_AUTH_USER)
+        if (!context.auth?.token.inviteEmail) {
+            logAndThrowError(SPECIFIC_ERRORS.SE_USER_HAS_NOT_ACTIVATED_INVITE_CODE)
+        }
 
         if (!data.ceremonyId) logAndThrowError(COMMON_ERRORS.CM_MISSING_OR_WRONG_INPUT_DATA)
 

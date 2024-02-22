@@ -16,6 +16,8 @@ import {
     sleep,
     terminate
 } from "../lib/utils.js"
+import { getDocumentById, useInviteEmail } from "@aptos-labs/zk-actions"
+import prompts from "prompts"
 
 /**
  * Custom countdown which throws an error when expires.
@@ -26,7 +28,7 @@ export const expirationCountdownForGithubOAuth = (expirationInSeconds: number) =
     let secondsCounter = expirationInSeconds <= 60 ? expirationInSeconds : 60
     const interval = 1 // 1s.
 
-    setInterval(() => {
+    return setInterval(() => {
         if (expirationInSeconds !== 0) {
             // Update time and seconds counter.
             expirationInSeconds -= interval
@@ -90,9 +92,6 @@ export const onVerification = async (verification: Verification): Promise<void> 
     }
 
     spinner.stop()
-
-    // Countdown for time expiration.
-    expirationCountdownForGithubOAuth(verification.expires_in)
 }
 
 /**
@@ -111,18 +110,27 @@ export const executeGithubDeviceFlow = async (clientId: string): Promise<string>
     const clientType = "oauth-app"
     const tokenType = "oauth"
 
+    let countdownTicker: undefined | NodeJS.Timeout
+
     // # Step 1.
     const auth = createOAuthDeviceAuth({
         clientType,
         clientId,
         scopes: ["gist"],
-        onVerification
+        onVerification: async (verification) => {
+            await onVerification(verification)
+
+            // Countdown for time expiration.
+            countdownTicker = expirationCountdownForGithubOAuth(verification.expires_in)
+        }
     })
 
     // # Step 3.
     const { token } = await auth({
         type: tokenType
     })
+
+    clearInterval(countdownTicker)
 
     return token
 }
@@ -133,7 +141,7 @@ export const executeGithubDeviceFlow = async (clientId: string): Promise<string>
  * @dev Under the hood, the command handles a manual Device Flow following the guidelines in the Github documentation.
  */
 const auth = async () => {
-    const { firebaseApp } = await bootstrapCommandExecutionAndServices()
+    const { firebaseApp, firestoreDatabase, firebaseFunctions } = await bootstrapCommandExecutionAndServices()
 
     // Console more context for the user.
     console.log(
@@ -180,10 +188,43 @@ const auth = async () => {
     const providerUserId = await getGithubProviderUserId(String(token))
 
     spinner.succeed(
-        `You are authenticated as ${theme.text.bold(
-            `@${getUserHandleFromProviderUserId(providerUserId)}`
-        )} and now able to interact with zk-SNARK Phase2 Trusted Setup ceremonies`
+        `You are authenticated as ${theme.text.bold(`@${getUserHandleFromProviderUserId(providerUserId)}`)}`
     )
+
+    // Prompt for invite code.
+
+    const { inviteEmail }: { inviteEmail: string } = await prompts({
+        type: "text",
+        name: "inviteEmail",
+        message: theme.text.bold("What is the email address you used to register on our event here: https://lu.ma/aptos-trusted-setup-ceremony?"),
+        validate: async (value) => {
+            if (value.length === 0) {
+                return `Please provide a valid email address.`
+            }
+
+            const inviteEmailDoc = await getDocumentById(firestoreDatabase, "inviteEmails", value)
+
+            if (!inviteEmailDoc.exists()) {
+                return "Did not find email address."
+            }
+
+            if (inviteEmailDoc.data().usedByUid && inviteEmailDoc.data().usedByUid !== providerUserId) {
+                return "Email address already used."
+            }
+            return true
+        }
+    })
+
+    if (inviteEmail) {
+        console.log(`${theme.symbols.success} Email address is valid, activating it now...`)
+        await useInviteEmail(firebaseFunctions, { inviteEmail })
+
+        console.log(
+            `${theme.symbols.success} You are authenticated as ${theme.text.bold(
+                `@${getUserHandleFromProviderUserId(providerUserId)}`
+            )} and now able to interact with zk-SNARK Phase2 Trusted Setup ceremonies`
+        )
+    }
 
     // Console more context for the user.
     console.log(

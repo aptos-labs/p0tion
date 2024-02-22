@@ -22,5 +22,10 @@ service cloud.firestore {
       // any authenticated user can read
       allow read: if true;
     }
+    // invite tokens
+    match /inviteEmails/{inviteEmail} {
+      // any user can read individual invite codes to validate that they are valid
+      allow get: if true;
+    }
   }
 }

@@ -2,7 +2,6 @@ import { Contract, ContractFactory, Signer } from "ethers"
 import { Firestore, where } from "firebase/firestore"
 import { Functions } from "firebase/functions"
 import fs from "fs"
-import solc from "solc"
 import {
     downloadAllCeremonyArtifacts,
     exportVerifierAndVKey,
@@ -103,8 +102,8 @@ export const compileContract = async (contractPath: string): Promise<any> => {
     }
 
     try {
-        const compiled = JSON.parse(solc.compile(JSON.stringify(input), { import: { contents: "" } }))
-        return compiled.contracts.Verifier.Verifier
+        // const compiled = JSON.parse(solc.compile(JSON.stringify(input), { import: { contents: "" } }))
+        // return compiled.contracts.Verifier.Verifier
     } catch (error: any) {
         throw new Error(
             "There was an error while compiling the smart contract. Please check that the file is not corrupted and try again."

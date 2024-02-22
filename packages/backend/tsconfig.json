@@ -6,5 +6,5 @@
         "outDir": "dist",
         "esModuleInterop": true
     },
-    "include": ["src/**/*", "test/**/*", "rollup.config.ts"]
+    "include": ["src/**/*", "test/**/*"]
 }

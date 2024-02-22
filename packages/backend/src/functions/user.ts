@@ -5,7 +5,7 @@ import dotenv from "dotenv"
 import { commonTerms, githubReputation } from "@aptos-labs/zk-actions"
 import { encode } from "html-entities"
 import { getGitHubVariables, getCurrentServerTimestampInMillis } from "../lib/utils"
-import { logAndThrowError, makeError, printLog, SPECIFIC_ERRORS } from "../lib/errors"
+import { COMMON_ERRORS, logAndThrowError, makeError, printLog, SPECIFIC_ERRORS } from "../lib/errors"
 import { LogLevel } from "../types/enums"
 
 dotenv.config()
@@ -159,6 +159,41 @@ export const processSignUpWithCustomClaims = functions
         try {
             // Set custom user claims on this newly created user.
             await admin.auth().setCustomUserClaims(user.uid, customClaims)
+        } catch (error: any) {
+            const specificError = SPECIFIC_ERRORS.SE_AUTH_SET_CUSTOM_USER_CLAIMS_FAIL
+            const additionalDetails = error.toString()
+            logAndThrowError(makeError(specificError.code, specificError.message, additionalDetails))
+        }
+    })
+
+export const useInviteEmail = functions
+    .region("us-central1")
+    .runWith({
+        memory: "512MB"
+    })
+    .https.onCall(async (data: { inviteEmail: string }, context: functions.https.CallableContext): Promise<any> => {
+        
+        if (!context.auth) logAndThrowError(COMMON_ERRORS.CM_NOT_AUTHENTICATED)
+
+        if (!data.inviteEmail) logAndThrowError(COMMON_ERRORS.CM_MISSING_OR_WRONG_INPUT_DATA)
+
+        const inviteEmail = data.inviteEmail
+        
+        const firestore = admin.firestore()
+        
+        const inviteEmailDoc = (await firestore.doc(`/inviteEmails/${inviteEmail}`).get());
+
+        if (!inviteEmailDoc.exists) logAndThrowError(SPECIFIC_ERRORS.SE_INVALID_INVITE_CODE)
+
+        const inviteEmailData = inviteEmailDoc.data()!
+
+        if (inviteEmailData.usedByUid && inviteEmailData.usedByUid !== context.auth?.uid) logAndThrowError(SPECIFIC_ERRORS.SE_INVITE_CODE_ALREADY_USED)
+
+        try {
+            // Set custom user claims on this newly created user.
+            const currentClaims = (await admin.auth().getUser(context.auth!.uid)).customClaims
+            await inviteEmailDoc.ref.update({usedByUid: context.auth?.uid})
+            await admin.auth().setCustomUserClaims(context.auth!.uid, {...currentClaims, inviteEmail: inviteEmail})
         } catch (error: any) {
             const specificError = SPECIFIC_ERRORS.SE_AUTH_SET_CUSTOM_USER_CLAIMS_FAIL
             const additionalDetails = error.toString()

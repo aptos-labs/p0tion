@@ -87,7 +87,8 @@ export {
     verifyContribution,
     checkAndPrepareCoordinatorForFinalization,
     finalizeCircuit,
-    finalizeCeremony
+    finalizeCeremony,
+    useInviteEmail,
 } from "./helpers/functions"
 export { toHex, blake512FromPath, computeSHA256ToHex, compareHashes } from "./helpers/crypto"
 export {

@@ -5,6 +5,7 @@
         "declaration": true,
         "moduleResolution": "Bundler",
         "module": "ES2015",
+        "declarationMap": true,
         "sourceMap": true,
         "typeRoots": ["node_modules/@types", "../../types"],
         "target": "ES2021",
