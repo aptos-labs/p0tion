@@ -46,64 +46,6 @@ export const registerAuthUser = functions
 
         // store the avatar URL of a contributor
         let avatarUrl: string = ""
-        // we only do reputation check if the user is not a coordinator
-        if (
-            !(
-                email?.endsWith(`@${process.env.CUSTOM_CLAIMS_COORDINATOR_EMAIL_ADDRESS_OR_DOMAIN}`) ||
-                email === process.env.CUSTOM_CLAIMS_COORDINATOR_EMAIL_ADDRESS_OR_DOMAIN
-            )
-        ) {
-            const auth = admin.auth()
-            // if provider == github.com let's use our functions to check the user's reputation
-            if (user.providerData[0].providerId === "github.com") {
-                const vars = getGitHubVariables()
-
-                // this return true or false
-                try {
-                    const { reputable, avatarUrl: avatarURL } = await githubReputation(
-                        user.providerData[0].uid,
-                        vars.minimumFollowing,
-                        vars.minimumFollowers,
-                        vars.minimumPublicRepos,
-                        vars.minimumAge
-                    )
-                    if (!reputable) {
-                        // Delete user
-                        await auth.deleteUser(user.uid)
-                        // Throw error
-                        logAndThrowError(
-                            makeError(
-                                "permission-denied",
-                                "The user is not allowed to sign up because their Github reputation is not high enough.",
-                                `The user ${
-                                    user.displayName === "Null" || user.displayName === null
-                                        ? user.uid
-                                        : user.displayName
-                                } is not allowed to sign up because their Github reputation is not high enough. Please contact the administrator if you think this is a mistake.`
-                            )
-                        )
-                    }
-                    // store locally
-                    avatarUrl = avatarURL
-                    printLog(
-                        `Github reputation check passed for user ${
-                            user.displayName === "Null" || user.displayName === null ? user.uid : user.displayName
-                        }`,
-                        LogLevel.DEBUG
-                    )
-                } catch (error: any) {
-                    // Delete user
-                    await auth.deleteUser(user.uid)
-                    logAndThrowError(
-                        makeError(
-                            "permission-denied",
-                            "There was an error while checking the user's Github reputation.",
-                            `${error}`
-                        )
-                    )
-                }
-            }
-        }
         // Set document (nb. we refer to providerData[0] because we use Github OAuth provider only).
         // In future releases we might want to loop through the providerData array as we support
         // more providers.
@@ -125,8 +67,10 @@ export const registerAuthUser = functions
         await avatarRef.set({
             avatarUrl: avatarUrl || ""
         })
-        printLog(`Authenticated user document with identifier ${uid} has been correctly stored`, LogLevel.DEBUG)
-        printLog(`Authenticated user avatar with identifier ${uid} has been correctly stored`, LogLevel.DEBUG)
+        printLog(
+            `Authenticated user document with identifier ${uid} and displayName ${user.displayName} has been correctly stored`,
+            LogLevel.INFO
+        )
     })
 /**
  * Set custom claims for role-based access control on the newly created user.
@@ -172,28 +116,28 @@ export const useInviteEmail = functions
         memory: "512MB"
     })
     .https.onCall(async (data: { inviteEmail: string }, context: functions.https.CallableContext): Promise<any> => {
-        
         if (!context.auth) logAndThrowError(COMMON_ERRORS.CM_NOT_AUTHENTICATED)
 
         if (!data.inviteEmail) logAndThrowError(COMMON_ERRORS.CM_MISSING_OR_WRONG_INPUT_DATA)
 
         const inviteEmail = data.inviteEmail
-        
+
         const firestore = admin.firestore()
-        
-        const inviteEmailDoc = (await firestore.doc(`/inviteEmails/${inviteEmail}`).get());
+
+        const inviteEmailDoc = await firestore.doc(`/inviteEmails/${inviteEmail}`).get()
 
         if (!inviteEmailDoc.exists) logAndThrowError(SPECIFIC_ERRORS.SE_INVALID_INVITE_CODE)
 
         const inviteEmailData = inviteEmailDoc.data()!
 
-        if (inviteEmailData.usedByUid && inviteEmailData.usedByUid !== context.auth?.uid) logAndThrowError(SPECIFIC_ERRORS.SE_INVITE_CODE_ALREADY_USED)
+        if (inviteEmailData.usedByUid && inviteEmailData.usedByUid !== context.auth?.uid)
+            logAndThrowError(SPECIFIC_ERRORS.SE_INVITE_CODE_ALREADY_USED)
 
         try {
             // Set custom user claims on this newly created user.
             const currentClaims = (await admin.auth().getUser(context.auth!.uid)).customClaims
-            await inviteEmailDoc.ref.update({usedByUid: context.auth?.uid})
-            await admin.auth().setCustomUserClaims(context.auth!.uid, {...currentClaims, inviteEmail: inviteEmail})
+            await inviteEmailDoc.ref.update({ usedByUid: context.auth?.uid })
+            await admin.auth().setCustomUserClaims(context.auth!.uid, { ...currentClaims, inviteEmail: inviteEmail })
         } catch (error: any) {
             const specificError = SPECIFIC_ERRORS.SE_AUTH_SET_CUSTOM_USER_CLAIMS_FAIL
             const additionalDetails = error.toString()

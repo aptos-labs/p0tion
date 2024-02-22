@@ -460,7 +460,7 @@ const checkIfVMRunning = async (ec2: EC2Client, vmInstanceId: string, attempts =
  * 2) Send all updates atomically to the Firestore database.
  */
 export const verifycontribution = functionsV2.https.onCall(
-    { memory: "16GiB", timeoutSeconds: 3600, region: "us-central1" },
+    { memory: "32GiB", timeoutSeconds: 3600, region: "us-central1" },
     async (request: functionsV2.https.CallableRequest<VerifyContributionData>): Promise<any> => {
         if (!request.auth || (!request.auth.token.participant && !request.auth.token.coordinator))
             logAndThrowError(SPECIFIC_ERRORS.SE_AUTH_NO_CURRENT_AUTH_USER)
@@ -562,7 +562,7 @@ export const verifycontribution = functionsV2.https.onCall(
 
         const verificationTaskTimer = new Timer({ label: `${ceremonyId}-${circuitId}-${participantDoc.id}` })
 
-        const completeVerification = async () => {
+        const xcompleteVerification = async () => {
             // Stop verification task timer.
             printLog("Completing verification", LogLevel.DEBUG)
             verificationTaskTimer.stop()

@@ -129,6 +129,8 @@ export const checkAndRemoveBlockingContributor = functions
                                           Number(avgFullContribution) +
                                           Number(timeoutDynamicThreshold)
                                         : Number(contributionStartedAt) + Number(fixedTimeWindow) * 60000 // * 60000 = convert minutes to millis.
+                                const timeoutExpirationDateInMsForContributorStuckOnDownloading =
+                                    Number(contributionStartedAt) + 7 * 60 * 1000 /* 7 minutes in millis */
 
                                 // Case (D).
                                 const timeoutExpirationDateInMsForVerificationCloudFunction =
@@ -139,6 +141,18 @@ export const checkAndRemoveBlockingContributor = functions
 
                                 // Assign the timeout type.
                                 let timeoutType: string = ""
+
+                                if (
+                                    timeoutExpirationDateInMsForContributorStuckOnDownloading <
+                                        currentServerTimestamp &&
+                                    contributionStep === ParticipantContributionStep.DOWNLOADING
+                                ) {
+                                    timeoutType = TimeoutType.BLOCKING_CONTRIBUTION
+                                    printLog(
+                                        `Contributor ${participant.id} stuck on downloading. Evicting from queue...`,
+                                        LogLevel.INFO
+                                    )
+                                }
 
                                 if (
                                     timeoutExpirationDateInMsForBlockingContributor < currentServerTimestamp &&

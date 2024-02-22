@@ -16,7 +16,7 @@ import {
     sleep,
     terminate
 } from "../lib/utils.js"
-import { getDocumentById, useInviteEmail } from "@aptos-labs/zk-actions"
+import { getCurrentFirebaseAuthUser, getDocumentById, useInviteEmail } from "@aptos-labs/zk-actions"
 import prompts from "prompts"
 
 /**
@@ -188,42 +188,60 @@ const auth = async () => {
     const providerUserId = await getGithubProviderUserId(String(token))
 
     spinner.succeed(
-        `You are authenticated as ${theme.text.bold(`@${getUserHandleFromProviderUserId(providerUserId)}`)}`
+        `You are authenticated as github user: ${theme.text.bold(
+            `@${getUserHandleFromProviderUserId(providerUserId)}`
+        )}`
     )
 
-    // Prompt for invite code.
+    // Get current authenticated user.
+    const firebaseUser = getCurrentFirebaseAuthUser(firebaseApp)
 
-    const { inviteEmail }: { inviteEmail: string } = await prompts({
-        type: "text",
-        name: "inviteEmail",
-        message: theme.text.bold("What is the email address you used to register on our event here: https://lu.ma/aptos-trusted-setup-ceremony?"),
-        validate: async (value) => {
-            if (value.length === 0) {
-                return `Please provide a valid email address.`
-            }
-
-            const inviteEmailDoc = await getDocumentById(firestoreDatabase, "inviteEmails", value)
-
-            if (!inviteEmailDoc.exists()) {
-                return "Did not find email address."
-            }
-
-            if (inviteEmailDoc.data().usedByUid && inviteEmailDoc.data().usedByUid !== providerUserId) {
-                return "Email address already used."
-            }
-            return true
-        }
-    })
+    let inviteEmail = (await firebaseUser.getIdTokenResult()).claims.inviteEmail
 
     if (inviteEmail) {
-        console.log(`${theme.symbols.success} Email address is valid, activating it now...`)
-        await useInviteEmail(firebaseFunctions, { inviteEmail })
-
         console.log(
-            `${theme.symbols.success} You are authenticated as ${theme.text.bold(
-                `@${getUserHandleFromProviderUserId(providerUserId)}`
-            )} and now able to interact with zk-SNARK Phase2 Trusted Setup ceremonies`
+            `${theme.symbols.success} Your are successfully authenticated with the email: ${theme.text.bold(
+                inviteEmail
+            )}`
         )
+    } else {
+        // Prompt for invite email.
+        inviteEmail = (
+            await prompts({
+                type: "text",
+                name: "inviteEmail",
+                message: theme.text.bold(
+                    "What is the email address you used to register on our event here: https://lu.ma/aptos-trusted-setup-ceremony?"
+                ),
+                validate: async (value) => {
+                    if (value.length === 0) {
+                        return `Please provide a valid email address.`
+                    }
+
+                    const inviteEmailDoc = await getDocumentById(firestoreDatabase, "inviteEmails", value)
+
+                    if (!inviteEmailDoc.exists()) {
+                        return "Invalid or already used email address."
+                    }
+
+                    if (inviteEmailDoc.data().usedByUid && inviteEmailDoc.data().usedByUid !== providerUserId) {
+                        return "Invalid or already used email address."
+                    }
+                    return true
+                }
+            })
+        ).inviteEmail as string
+
+        if (inviteEmail) {
+            console.log(`${theme.symbols.success} Email address is valid, activating it now...`)
+            await useInviteEmail(firebaseFunctions, { inviteEmail })
+
+            console.log(
+                `${theme.symbols.success} You are authenticated as ${theme.text.bold(
+                    `@${getUserHandleFromProviderUserId(providerUserId)}`
+                )} and now able to interact with zk-SNARK Phase2 Trusted Setup ceremonies`
+            )
+        }
     }
 
     // Console more context for the user.
