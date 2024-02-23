@@ -651,7 +651,7 @@ export const handleStartOrResumeContribution = async (
         spinner.start()
 
         // Read local transcript file info to get the contribution hash.
-        const transcriptContents = readFile(transcriptLocalFilePath)
+        const transcriptContents = readFile(transcriptLocalFilePath).replaceAll("\r", "")
         const matchContributionHash = transcriptContents.match(/Contribution.+Hash.+\n\t\t.+\n\t\t.+\n.+\n\t\t.+\n/)
 
         if (!matchContributionHash)
