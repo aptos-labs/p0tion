@@ -562,7 +562,7 @@ export const verifycontribution = functionsV2.https.onCall(
 
         const verificationTaskTimer = new Timer({ label: `${ceremonyId}-${circuitId}-${participantDoc.id}` })
 
-        const xcompleteVerification = async () => {
+        const completeVerification = async () => {
             // Stop verification task timer.
             printLog("Completing verification", LogLevel.DEBUG)
             verificationTaskTimer.stop()
