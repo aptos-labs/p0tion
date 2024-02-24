@@ -702,7 +702,7 @@ export const listenToParticipantDocumentChanges = async (
                 // Pre-condition Y => contribute / resume when contribution step = UPLOADING without any pre-uploaded chunk.
                 (uploadingStep && resumingContribution && noTemporaryContributionData) ||
                 // Pre-condition Z => contribute / resume when contribution step = UPLOADING w/ some pre-uploaded chunk.
-                (!noTemporaryContributionData && resumingWithSameTemporaryData)
+                (uploadingStep && resumingContribution && !noTemporaryContributionData && resumingWithSameTemporaryData)
 
             // Scenario (3.B).
             if (isCurrentContributor && hasResumableStep && startingOrResumingContribution) {

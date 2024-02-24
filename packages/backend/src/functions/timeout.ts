@@ -10,6 +10,7 @@ import {
     getTimeoutsCollectionPath,
     commonTerms
 } from "@aptos-labs/zk-actions"
+import { FieldValue } from "firebase-admin/firestore"
 import {
     getCeremonyCircuits,
     getCurrentServerTimestampInMillis,
@@ -296,7 +297,7 @@ export const resumeContributionAfterTimeoutExpiration = functions
             await participantDoc.ref.update({
                 status: ParticipantStatus.READY,
                 lastUpdated: getCurrentServerTimestampInMillis(),
-                tempContributionData: {}
+                tempContributionData: FieldValue.delete()
             })
         else logAndThrowError(SPECIFIC_ERRORS.SE_CONTRIBUTE_CANNOT_PROGRESS_TO_NEXT_CIRCUIT)
 
