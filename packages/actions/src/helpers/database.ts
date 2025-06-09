@@ -134,7 +134,8 @@ export const getOpenedCeremonies = async (firestoreDatabase: Firestore): Promise
         commonTerms.collections.ceremonies.name,
         [
             where(commonTerms.collections.ceremonies.fields.state, "==", CeremonyState.OPENED),
-            where(commonTerms.collections.ceremonies.fields.endDate, ">=", Date.now())
+            where(commonTerms.collections.ceremonies.fields.endDate, ">=", Date.now()),
+            where(commonTerms.collections.ceremonies.fields.isTestingCeremony, "==", false)
         ]
     )
 

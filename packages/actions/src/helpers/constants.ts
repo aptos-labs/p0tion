@@ -229,6 +229,7 @@ export const commonTerms = {
                 coordinatorId: "coordinatorId",
                 description: "description",
                 endDate: "endDate",
+                isTestingCeremony: "isTestingCeremony",
                 lastUpdated: "lastUpdated",
                 penalty: "penalty",
                 prefix: "prefix",
@@ -314,6 +315,6 @@ export const commonTerms = {
         finalizeCeremony: "finalizeCeremony",
         downloadCircuitArtifacts: "downloadCircuitArtifacts",
         transferObject: "transferObject",
-        useInviteEmail: "useInviteEmail",
+        useInviteEmail: "useInviteEmail"
     }
 }
