@@ -4,6 +4,8 @@ import { Verification } from "@octokit/auth-oauth-device/dist-types/types.js"
 import clipboard from "clipboardy"
 import open from "open"
 import figlet from "figlet"
+import { getCurrentFirebaseAuthUser, getDocumentById, useInviteEmail } from "@aptos-labs/zk-actions"
+import prompts from "prompts"
 import { GENERIC_ERRORS, showError } from "../lib/errors.js"
 import { checkLocalAccessToken, getLocalAccessToken, setLocalAccessToken } from "../lib/localConfigs.js"
 import { bootstrapCommandExecutionAndServices, signInToFirebase } from "../lib/services.js"
@@ -16,8 +18,6 @@ import {
     sleep,
     terminate
 } from "../lib/utils.js"
-import { getCurrentFirebaseAuthUser, getDocumentById, useInviteEmail } from "@aptos-labs/zk-actions"
-import prompts from "prompts"
 
 /**
  * Custom countdown which throws an error when expires.
@@ -196,7 +196,7 @@ const auth = async () => {
     // Get current authenticated user.
     const firebaseUser = getCurrentFirebaseAuthUser(firebaseApp)
 
-    let inviteEmail = (await firebaseUser.getIdTokenResult()).claims.inviteEmail
+    let {inviteEmail} = (await firebaseUser.getIdTokenResult()).claims
 
     if (inviteEmail) {
         console.log(
@@ -210,22 +210,20 @@ const auth = async () => {
             await prompts({
                 type: "text",
                 name: "inviteEmail",
-                message: theme.text.bold(
-                    "What is the email address you used to register on our event here: https://lu.ma/aptos-trusted-setup-ceremony?"
-                ),
+                message: theme.text.bold("What is the invite code you received?"),
                 validate: async (value) => {
                     if (value.length === 0) {
-                        return `Please provide a valid email address.`
+                        return `Please provide a valid invite code.`
                     }
 
                     const inviteEmailDoc = await getDocumentById(firestoreDatabase, "inviteEmails", value)
 
                     if (!inviteEmailDoc.exists()) {
-                        return "Invalid or already used email address."
+                        return "Invalid or already used invite code."
                     }
 
                     if (inviteEmailDoc.data().usedByUid && inviteEmailDoc.data().usedByUid !== providerUserId) {
-                        return "Invalid or already used email address."
+                        return "Invalid or already used invite code."
                     }
                     return true
                 }
@@ -233,7 +231,7 @@ const auth = async () => {
         ).inviteEmail as string
 
         if (inviteEmail) {
-            console.log(`${theme.symbols.success} Email address is valid, activating it now...`)
+            console.log(`${theme.symbols.success} Invite code is valid, activating it now...`)
             await useInviteEmail(firebaseFunctions, { inviteEmail })
 
             console.log(

@@ -428,7 +428,7 @@ export const handlePublicAttestation = async (
     )
 
     // Prepare a ready-to-share tweet.
-    await handleTweetGeneration(ceremonyName, gistUrl)
+    // await handleTweetGeneration(ceremonyName, gistUrl)
 }
 
 /**
@@ -1078,7 +1078,7 @@ const contribute = async (opt: any) => {
                 )
 
                 // Prepare a ready-to-share tweet.
-                await handleTweetGeneration(selectedCeremony.data.title, gistUrl)
+                // await handleTweetGeneration(selectedCeremony.data.title, gistUrl)
             }
 
             console.log(
