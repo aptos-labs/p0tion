@@ -25,7 +25,6 @@ import {
 } from "@aptos-labs/zk-actions"
 import { DocumentSnapshot, DocumentData, Firestore, onSnapshot, Timestamp } from "firebase/firestore"
 import { Functions } from "firebase/functions"
-import open from "open"
 import { askForConfirmation, promptForCeremonySelection, promptForEntropy } from "../lib/prompts.js"
 import {
     terminate,
@@ -33,10 +32,7 @@ import {
     simpleLoader,
     getSecondsMinutesHoursFromMillis,
     sleep,
-    publishGist,
-    generateCustomUrlToTweetAboutParticipation,
     handleStartOrResumeContribution,
-    getPublicAttestationGist,
     estimateParticipantFreeGlobalDiskSpace
 } from "../lib/utils.js"
 import { COMMAND_ERRORS, showError } from "../lib/errors.js"
@@ -82,27 +78,6 @@ export const getLatestVerificationResult = async (
             contribution?.data.valid ? `correct` : `wrong`
         }`
     )
-}
-
-/**
- * Generate a ready-to-share tweet on public attestation.
- * @param ceremonyTitle <string> - the title of the ceremony.
- * @param gistUrl <string> - the Github public attestation gist url.
- */
-export const handleTweetGeneration = async (ceremonyTitle: string, gistUrl: string): Promise<void> => {
-    // Generate a ready to share custom url to tweet about ceremony participation.
-    const tweetUrl = generateCustomUrlToTweetAboutParticipation(ceremonyTitle, gistUrl, false)
-
-    console.log(
-        `${
-            theme.symbols.info
-        } We encourage you to tweet to spread the word about your participation to the ceremony by clicking the link below\n\n${theme.text.underlined(
-            tweetUrl
-        )}`
-    )
-
-    // Automatically open a webpage with the tweet.
-    await open(tweetUrl)
 }
 
 /**
@@ -376,7 +351,7 @@ export const generatePublicAttestation = async (
 }
 
 /**
- * Generate a public attestation for a contributor, publish the attestation as gist, and prepare a new ready-to-share tweet about ceremony participation.
+ * Generate a public attestation for a contributor.
  * @param firestoreDatabase <Firestore> - the Firestore service instance associated to the current Firebase application.
  * @param circuits <Array<FirebaseDocumentInfo>> - the array of ceremony circuits documents.
  * @param ceremonyId <string> - the unique identifier of the ceremony.
@@ -384,8 +359,6 @@ export const generatePublicAttestation = async (
  * @param participantContributions <Array<Co> - the document data of the participant.
  * @param contributorIdentifier <string> - the identifier of the contributor (handle, name, uid).
  * @param ceremonyName <string> - the name of the ceremony.
- * @param ceremonyPrefix <string> - the prefix of the ceremony.
- * @param participantAccessToken <string> - the access token of the participant.
  */
 export const handlePublicAttestation = async (
     firestoreDatabase: Firestore,
@@ -395,8 +368,7 @@ export const handlePublicAttestation = async (
     participantContributions: Array<Contribution>,
     contributorIdentifier: string,
     ceremonyName: string,
-    ceremonyPrefix: string,
-    participantAccessToken: string
+    ceremonyPrefix: string
 ) => {
     await simpleLoader(`Generating your public attestation...`, `clock`, 3000)
 
@@ -411,24 +383,18 @@ export const handlePublicAttestation = async (
         ceremonyName
     )
 
-    // Write public attestation locally.
-    writeFile(
-        getAttestationLocalFilePath(`${ceremonyPrefix}_${commonTerms.foldersAndPathsTerms.attestation}.log`),
-        Buffer.from(publicAttestation)
+    const attestationPath = getAttestationLocalFilePath(
+        `${ceremonyPrefix}_${commonTerms.foldersAndPathsTerms.attestation}.log`
     )
 
-    await sleep(1000) // workaround for file descriptor unexpected close.
-
-    const gistUrl = await publishGist(participantAccessToken, publicAttestation, ceremonyName, ceremonyPrefix)
+    // Write public attestation locally.
+    writeFile(attestationPath, Buffer.from(publicAttestation))
 
     console.log(
-        `\n${theme.symbols.info} Your public attestation has been successfully posted as Github Gist (${theme.text.bold(
-            theme.text.underlined(gistUrl)
-        )})`
+        `\n${theme.symbols.info} Your public attestation has been successfully written locally at ${theme.text.bold(
+            attestationPath
+        )}`
     )
-
-    // Prepare a ready-to-share tweet.
-    // await handleTweetGeneration(ceremonyName, gistUrl)
 }
 
 /**
@@ -563,8 +529,7 @@ export const listenToParticipantDocumentChanges = async (
     participant: DocumentSnapshot<DocumentData>,
     ceremony: FirebaseDocumentInfo,
     entropy: string,
-    providerUserId: string,
-    accessToken: string
+    providerUserId: string
 ) => {
     // Listen to participant document changes.
     // nb. this listener encapsulates the core business logic of the contribute command.
@@ -850,8 +815,7 @@ export const listenToParticipantDocumentChanges = async (
                         changedContributions,
                         providerUserId,
                         ceremony.data.title,
-                        ceremony.data.prefix,
-                        accessToken
+                        ceremony.data.prefix
                     )
 
                     console.log(
@@ -880,8 +844,7 @@ export const listenToParticipantDocumentChanges = async (
                     changedContributions,
                     providerUserId,
                     ceremony.data.title,
-                    ceremony.data.prefix,
-                    accessToken
+                    ceremony.data.prefix
                 )
 
                 console.log(
@@ -903,7 +866,7 @@ export const listenToParticipantDocumentChanges = async (
  * @notice The contribute command allows an authenticated user to become a participant (contributor) to the selected ceremony by providing the
  * entropy (toxic waste) for the contribution.
  * @dev For proper execution, the command requires the user to be authenticated with Github account (run auth command first) in order to
- * handle sybil-resistance and connect to Github APIs to publish the gist containing the public attestation.
+ * handle sybil-resistance.
  */
 const contribute = async (opt: any) => {
     const { firebaseApp, firebaseFunctions, firestoreDatabase } = await bootstrapCommandExecutionAndServices()
@@ -914,7 +877,7 @@ const contribute = async (opt: any) => {
     const { auth } = opt
 
     // Check for authentication.
-    const { user, providerUserId, token } = auth ? await authWithToken(firebaseApp, auth) : await checkAuth(firebaseApp)
+    const { user, providerUserId } = auth ? await authWithToken(firebaseApp, auth) : await checkAuth(firebaseApp)
 
     // Prepare data.
     let selectedCeremony: FirebaseDocumentInfo
@@ -1020,8 +983,7 @@ const contribute = async (opt: any) => {
             participant,
             selectedCeremony,
             entropy,
-            providerUserId,
-            token
+            providerUserId
         )
     } else {
         // Extract participant data.
@@ -1035,51 +997,6 @@ const contribute = async (opt: any) => {
             spinner.info(`You have already made the contributions for the circuits in the ceremony`)
 
             // await handleContributionValidity(firestoreDatabase, circuits, selectedCeremony.id, participant.id)
-
-            spinner.text = "Checking your public attestation gist..."
-            spinner.start()
-
-            // Check whether the user has published the Github Gist about the public attestation.
-            const publishedPublicAttestationGist = await getPublicAttestationGist(
-                token,
-                `${selectedCeremony.data.prefix}_${commonTerms.foldersAndPathsTerms.attestation}.log`
-            )
-
-            if (!publishedPublicAttestationGist) {
-                spinner.stop()
-
-                await handlePublicAttestation(
-                    firestoreDatabase,
-                    circuits,
-                    selectedCeremony.id,
-                    participant.id,
-                    participantData?.contributions!,
-                    providerUserId,
-                    selectedCeremony.data.title,
-                    selectedCeremony.data.prefix,
-                    token
-                )
-            } else {
-                // Extract url from raw.
-                const gistUrl = publishedPublicAttestationGist.raw_url.substring(
-                    0,
-                    publishedPublicAttestationGist.raw_url.indexOf("/raw/")
-                )
-
-                spinner.stop()
-
-                process.stdout.write(`\n`)
-                console.log(
-                    `${
-                        theme.symbols.success
-                    } Your public attestation has been successfully posted as Github Gist (${theme.text.bold(
-                        theme.text.underlined(gistUrl)
-                    )})`
-                )
-
-                // Prepare a ready-to-share tweet.
-                // await handleTweetGeneration(selectedCeremony.data.title, gistUrl)
-            }
 
             console.log(
                 `\nThank you for participating and securing the ${selectedCeremony.data.title} ceremony ${theme.emojis.pray}`

@@ -116,7 +116,7 @@ export const executeGithubDeviceFlow = async (clientId: string): Promise<string>
     const auth = createOAuthDeviceAuth({
         clientType,
         clientId,
-        scopes: ["gist"],
+        scopes: [],
         onVerification: async (verification) => {
             await onVerification(verification)
 
@@ -196,11 +196,11 @@ const auth = async () => {
     // Get current authenticated user.
     const firebaseUser = getCurrentFirebaseAuthUser(firebaseApp)
 
-    let {inviteEmail} = (await firebaseUser.getIdTokenResult()).claims
+    let { inviteEmail } = (await firebaseUser.getIdTokenResult()).claims
 
     if (inviteEmail) {
         console.log(
-            `${theme.symbols.success} Your are successfully authenticated with the email: ${theme.text.bold(
+            `${theme.symbols.success} Your are successfully authenticated with the invite code: ${theme.text.bold(
                 inviteEmail
             )}`
         )
