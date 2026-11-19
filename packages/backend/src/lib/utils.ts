@@ -1,3 +1,4 @@
+import { getAWSCredentials } from "./secrets"
 import {
     DocumentData,
     QuerySnapshot,
@@ -403,9 +404,8 @@ export const getGitHubVariables = (): any => {
  * @returns <any> - the AWS EC2 variables.
  */
 export const getAWSVariables = (): any => {
+    const credentials = getAWSCredentials()
     if (
-        !process.env.AWS_ACCESS_KEY_ID ||
-        !process.env.AWS_SECRET_ACCESS_KEY ||
         !process.env.AWS_INSTANCE_PROFILE_ARN ||
         !process.env.AWS_AMI_ID ||
         !process.env.AWS_SNS_TOPIC_ARN
@@ -413,8 +413,7 @@ export const getAWSVariables = (): any => {
         logAndThrowError(COMMON_ERRORS.CM_WRONG_CONFIGURATION)
 
     return {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+        ...credentials,
         region: process.env.AWS_REGION || "eu-central-1",
         instanceProfileArn: process.env.AWS_INSTANCE_PROFILE_ARN!,
         amiId: process.env.AWS_AMI_ID!,

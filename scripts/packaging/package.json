@@ -1,0 +1,15 @@
+{
+    "name": "p0tion-packaging-tools",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Standalone, script-free local packaging tools; not backend runtime dependencies",
+    "engines": {
+        "node": ">=20"
+    },
+    "dependencies": {
+        "pnpm": "8.6.1",
+        "yaml": "2.3.4",
+        "typescript": "5.0.4",
+        "firebase-tools": "15.34.1"
+    }
+}

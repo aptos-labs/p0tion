@@ -1,3 +1,4 @@
+import { AWS_SECRETS, AWS_RUNTIME_SERVICE_ACCOUNT } from "../lib/secrets"
 import * as functions from "firebase-functions"
 import admin from "firebase-admin"
 import {
@@ -134,6 +135,8 @@ const checkIfBucketIsDedicatedToCeremony = async (bucketName: string) => {
 export const createBucket = functions
     .region("us-central1")
     .runWith({
+        secrets: AWS_SECRETS,
+        serviceAccount: AWS_RUNTIME_SERVICE_ACCOUNT,
         memory: "512MB"
     })
     .https.onCall(async (data: CreateBucketData, context: functions.https.CallableContext) => {
@@ -238,6 +241,8 @@ export const createBucket = functions
 export const checkIfObjectExist = functions
     .region("us-central1")
     .runWith({
+        secrets: AWS_SECRETS,
+        serviceAccount: AWS_RUNTIME_SERVICE_ACCOUNT,
         memory: "512MB"
     })
     .https.onCall(async (data: BucketAndObjectKeyData, context: functions.https.CallableContext): Promise<boolean> => {
@@ -294,6 +299,8 @@ export const checkIfObjectExist = functions
 export const generateGetObjectPreSignedUrl = functions
     .region("us-central1")
     .runWith({
+        secrets: AWS_SECRETS,
+        serviceAccount: AWS_RUNTIME_SERVICE_ACCOUNT,
         memory: "512MB"
     })
     .https.onCall(async (data: BucketAndObjectKeyData, context: functions.https.CallableContext): Promise<any> => {
@@ -341,6 +348,8 @@ export const generateGetObjectPreSignedUrl = functions
 export const startMultiPartUpload = functions
     .region("us-central1")
     .runWith({
+        secrets: AWS_SECRETS,
+        serviceAccount: AWS_RUNTIME_SERVICE_ACCOUNT,
         memory: "512MB"
     })
     .https.onCall(async (data: StartMultiPartUploadData, context: functions.https.CallableContext): Promise<any> => {
@@ -409,6 +418,8 @@ export const startMultiPartUpload = functions
 export const generatePreSignedUrlsParts = functions
     .region("us-central1")
     .runWith({
+        secrets: AWS_SECRETS,
+        serviceAccount: AWS_RUNTIME_SERVICE_ACCOUNT,
         memory: "512MB",
         timeoutSeconds: 300
     })
@@ -487,6 +498,8 @@ export const generatePreSignedUrlsParts = functions
 export const completeMultiPartUpload = functions
     .region("us-central1")
     .runWith({
+        secrets: AWS_SECRETS,
+        serviceAccount: AWS_RUNTIME_SERVICE_ACCOUNT,
         memory: "512MB"
     })
     .https.onCall(async (data: CompleteMultiPartUploadData, context: functions.https.CallableContext): Promise<any> => {

@@ -1,0 +1,15 @@
+{
+    "firestore": {
+        "rules": "firestore.rules",
+        "indexes": "firestore.indexes.json"
+    },
+    "functions": {
+        "source": ".deploy-stage",
+        "isolate": false,
+        "ignore": [
+            "node_modules",
+            ".git"
+        ],
+        "predeploy": "node \"$PROJECT_DIR/../../scripts/packaging/stage.mjs\" verify"
+    }
+}

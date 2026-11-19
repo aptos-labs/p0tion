@@ -1,3 +1,4 @@
+import { AWS_SECRETS, AWS_RUNTIME_SERVICE_ACCOUNT } from "../lib/secrets"
 import * as functionsV1 from "firebase-functions/v1"
 import * as functionsV2 from "firebase-functions/v2"
 import admin from "firebase-admin"
@@ -312,6 +313,8 @@ const waitForVMCommandExecution = (ssm: SSMClient, vmInstanceId: string, command
 export const coordinateCeremonyParticipant = functionsV1
     .region("us-central1")
     .runWith({
+        secrets: AWS_SECRETS,
+        serviceAccount: AWS_RUNTIME_SERVICE_ACCOUNT,
         memory: "512MB"
     })
     .firestore.document(
@@ -460,7 +463,7 @@ const checkIfVMRunning = async (ec2: EC2Client, vmInstanceId: string, attempts =
  * 2) Send all updates atomically to the Firestore database.
  */
 export const verifycontribution = functionsV2.https.onCall(
-    { memory: "32GiB", timeoutSeconds: 3600, region: "us-central1" },
+    { memory: "32GiB", timeoutSeconds: 3600, region: "us-central1", secrets: AWS_SECRETS, serviceAccount: AWS_RUNTIME_SERVICE_ACCOUNT },
     async (request: functionsV2.https.CallableRequest<VerifyContributionData>): Promise<any> => {
         if (!request.auth || (!request.auth.token.participant && !request.auth.token.coordinator))
             logAndThrowError(SPECIFIC_ERRORS.SE_AUTH_NO_CURRENT_AUTH_USER)
@@ -966,6 +969,8 @@ export const refreshParticipantAfterContributionVerification = functionsV1
 export const finalizeCircuit = functionsV1
     .region("us-central1")
     .runWith({
+        secrets: AWS_SECRETS,
+        serviceAccount: AWS_RUNTIME_SERVICE_ACCOUNT,
         memory: "512MB"
     })
     .https.onCall(async (data: FinalizeCircuitData, context: functionsV1.https.CallableContext) => {

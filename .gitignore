@@ -1,6 +1,11 @@
 # dependencies
 node_modules/
 package-lock.json
+!scripts/packaging/package-lock.json
+packages/backend/.deploy-stage/
+packages/backend/.fallback-stage/
+packages/backend/deployment.config.json
+.packaging-evidence/
 yarn-error.log
 lerna-debug.log
 

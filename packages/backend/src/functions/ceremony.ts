@@ -1,3 +1,4 @@
+import { AWS_SECRETS, AWS_RUNTIME_SERVICE_ACCOUNT } from "../lib/secrets"
 import * as functions from "firebase-functions"
 import admin from "firebase-admin"
 import dotenv from "dotenv"
@@ -96,6 +97,8 @@ export const stopCeremony = functions
 export const setupCeremony = functions
     .region("us-central1")
     .runWith({
+        secrets: AWS_SECRETS,
+        serviceAccount: AWS_RUNTIME_SERVICE_ACCOUNT,
         memory: "512MB"
     })
     .https.onCall(async (data: SetupCeremonyData, context: functions.https.CallableContext): Promise<any> => {
@@ -273,6 +276,8 @@ export const initEmptyWaitingQueueForCircuit = functions
 export const finalizeCeremony = functions
     .region("us-central1")
     .runWith({
+        secrets: AWS_SECRETS,
+        serviceAccount: AWS_RUNTIME_SERVICE_ACCOUNT,
         memory: "512MB"
     })
     .https.onCall(async (data: { ceremonyId: string }, context: functions.https.CallableContext): Promise<any> => {
