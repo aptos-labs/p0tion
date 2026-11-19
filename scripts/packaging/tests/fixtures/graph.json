@@ -1,0 +1,41 @@
+{
+  "manifest": {
+    "dependencies": { "@aptos-labs/zk-actions": "0.0.2", "runtime": "1.0.0" },
+    "optionalDependencies": { "optional": "1.0.0" },
+    "devDependencies": { "dev-only": "1.0.0", "shared": "1.0.0" }
+  },
+  "lock": {
+    "lockfileVersion": "6.1",
+    "settings": { "autoInstallPeers": true, "excludeLinksFromLockfile": false },
+    "importers": {
+      "packages/backend": {
+        "dependencies": {
+          "@aptos-labs/zk-actions": { "specifier": "0.0.2", "version": "0.0.2(peer@1.0.0)" },
+          "runtime": { "specifier": "1.0.0", "version": "1.0.0" }
+        },
+        "optionalDependencies": { "optional": { "specifier": "1.0.0", "version": "1.0.0" } },
+        "devDependencies": {
+          "dev-only": { "specifier": "1.0.0", "version": "1.0.0" },
+          "shared": { "specifier": "1.0.0", "version": "1.0.0" }
+        }
+      },
+      "packages/actions": { "dependencies": { "orphan": { "specifier": "1.0.0", "version": "1.0.0" } } }
+    },
+    "packages": {
+      "/@aptos-labs/zk-actions@0.0.2(peer@1.0.0)": {
+        "resolution": { "integrity": "sha512-fixture-actions" },
+        "dependencies": { "peer": "1.0.0", "shared": "1.0.0" },
+        "peerDependencies": { "peer": "^1.0.0" },
+        "peerDependenciesMeta": { "absent-peer": { "optional": true } },
+        "transitivePeerDependencies": ["absent-peer"],
+        "dev": false
+      },
+      "/runtime@1.0.0": { "resolution": { "integrity": "sha512-fixture-runtime" }, "dependencies": { "shared": "1.0.0" }, "optionalDependencies": { "optional": "1.0.0" } },
+      "/shared@1.0.0": { "resolution": { "integrity": "sha512-fixture-shared" }, "dev": true },
+      "/peer@1.0.0": { "resolution": { "integrity": "sha512-fixture-peer" }, "dev": true },
+      "/optional@1.0.0": { "resolution": { "integrity": "sha512-fixture-optional" }, "optional": true, "os": ["darwin"], "cpu": ["x64"] },
+      "/dev-only@1.0.0": { "resolution": { "integrity": "sha512-fixture-dev" }, "dev": true },
+      "/orphan@1.0.0": { "resolution": { "integrity": "sha512-fixture-orphan" }, "dev": false }
+    }
+  }
+}

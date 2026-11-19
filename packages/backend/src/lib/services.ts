@@ -1,3 +1,4 @@
+import { getAWSCredentials } from "./secrets"
 import { S3Client } from "@aws-sdk/client-s3"
 import { COMMON_ERRORS, logAndThrowError } from "./errors"
 
@@ -8,9 +9,8 @@ import { COMMON_ERRORS, logAndThrowError } from "./errors"
  * @returns <Promise<S3Client>> - the instance of the connected S3 Client instance.
  */
 export const getS3Client = async (): Promise<S3Client> => {
+    const credentials = getAWSCredentials()
     if (
-        !process.env.AWS_ACCESS_KEY_ID ||
-        !process.env.AWS_SECRET_ACCESS_KEY ||
         !process.env.AWS_REGION ||
         !process.env.AWS_PRESIGNED_URL_EXPIRATION ||
         !process.env.AWS_CEREMONY_BUCKET_POSTFIX
@@ -19,10 +19,7 @@ export const getS3Client = async (): Promise<S3Client> => {
 
     // Return the connected S3 Client instance.
     return new S3Client({
-        credentials: {
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!
-        },
+        credentials,
         region: process.env.AWS_REGION!
     })
 }

@@ -14,7 +14,7 @@
     },
     "types": "dist/types/types/index.d.ts",
     "engines": {
-        "node": "18"
+        "node": "22"
     },
     "files": [
         "dist/",
@@ -49,7 +49,13 @@
         "emulator:shell": "yarn build && firebase functions:shell",
         "emulator:exec-test": "firebase --project dev emulators:exec \"yarn test:emulator\"",
         "test:emulator": "jest --config=../../jest.json --detectOpenHandles --forceExit --coverage=false --watchAll=false --no-cache",
-        "docs": "typedoc src/**/*.ts --out ../../docs/backend"
+        "docs": "typedoc src/**/*.ts --out ../../docs/backend",
+        "packaging:stage": "node ../../scripts/packaging/stage.mjs stage",
+        "packaging:verify": "node ../../scripts/packaging/stage.mjs verify",
+        "packaging:test": "node --test ../../scripts/packaging/tests/*.test.mjs ../../scripts/packaging/tests/*.test.cjs",
+        "packaging:validate": "node ../../scripts/packaging/validate-install.mjs",
+        "packaging:release-plan": "node ../../scripts/packaging/release-production.mjs --plan",
+        "packaging:deploy-functions": "node ../../scripts/packaging/release-production.mjs --execute"
     },
     "devDependencies": {
         "@firebase/rules-unit-testing": "^2.0.7",

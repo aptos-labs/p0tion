@@ -49,6 +49,49 @@ Launching the ready-to-run customized scripts everyone could handle whatever is 
 
 ![Components Diagram]("https://github.com/privacy-scaling-explorations/p0tion/blob/main/packages/backend/assets/components.png")
 
+## Production deployment packaging
+
+The backend uses Node 22. AWS credentials come from the `AWS_ACCESS_KEY_ID` and
+`AWS_SECRET_ACCESS_KEY` Secret Manager bindings, read lazily by the eleven AWS
+consumer functions. Those functions use the dedicated
+`p0tion-aws-functions@<deployment-project>.iam.gserviceaccount.com` identity.
+Each deployment project must provision that account, access to the two secrets,
+and the required Firestore permissions; do not grant Editor.
+
+The standalone packager uploads the compiled backend, its production manifest,
+a production-only lockfile, and validated nonsecret configuration. It excludes
+source, tests, credentials and workspace development dependencies while preserving
+locked runtime versions, including registry `@aptos-labs/zk-actions@0.0.2`.
+
+From the repository root:
+
+```bash
+npm ci --prefix scripts/packaging --ignore-scripts --no-audit --no-fund
+node --test scripts/packaging/tests/*.test.mjs scripts/packaging/tests/*.test.cjs
+```
+
+Build `packages/backend/dist/index.cjs.js` using the reviewed development
+dependencies. Copy `deployment.config.example.json` to `deployment.config.json`
+and fill its ten nonsecret settings; the generated `.env` never reads the
+backend's existing `.env` or accepts credential fields. Then run:
+
+```bash
+node scripts/packaging/stage.mjs stage
+node scripts/packaging/stage.mjs verify
+node scripts/packaging/validate-install.mjs "$PWD/.packaging-evidence/review-1"
+node scripts/packaging/release-production.mjs --plan
+```
+
+Validation uses a disposable frozen installation outside the workspace with
+lifecycle scripts disabled and records installed packages and hashes. It does
+not exercise participant workflows. Deployment uses pinned official Firebase
+CLI 15.34.1 and the scoped `firebase.deploy.json`; existing CI deployment paths
+have not been migrated. The release plan lists the target project and selected
+functions without making cloud calls. Check the target configuration and preserve
+its invocation policy before deploying. Keep automatic security updates enabled
+for managed runtimes so OS and runtime patches can be applied independently of
+application changes.
+
 ## 🛠 Installation
 
 **Prerequisites**

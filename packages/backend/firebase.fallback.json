@@ -1,0 +1,8 @@
+{
+    "functions": {
+        "source": ".fallback-stage",
+        "predeploy": [
+            "node \"$PROJECT_DIR/../../scripts/packaging/verify-fallback.mjs\""
+        ]
+    }
+}
