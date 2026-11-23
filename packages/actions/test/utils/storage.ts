@@ -1,4 +1,11 @@
-import { DeleteBucketCommand, DeleteObjectCommand, S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
+import {
+    DeleteBucketCommand,
+    DeleteObjectCommand,
+    ObjectCannedACL,
+    PutObjectCommand,
+    S3Client
+} from "@aws-sdk/client-s3"
+import { Firestore as AdminFirestore } from "firebase-admin/firestore"
 import fs from "fs"
 import {
     CeremonyDocumentReferenceAndData,
@@ -107,7 +114,7 @@ export const uploadFileToS3 = async (bucketName: string, objectKey: string, path
         Bucket: bucketName,
         Key: objectKey,
         Body: fs.createReadStream(path),
-        ACL: "public-read"
+        ACL: ObjectCannedACL.public_read
     }
 
     const command = new PutObjectCommand(params)
@@ -122,7 +129,7 @@ export const uploadFileToS3 = async (bucketName: string, objectKey: string, path
  * @param circuitData <CircuitDocumentReferenceAndData> the circuit data
  */
 export const createMockCeremony = async (
-    adminFirestore: FirebaseFirestore.Firestore,
+    adminFirestore: AdminFirestore,
     ceremonyData: CeremonyDocumentReferenceAndData,
     circuitData: CircuitDocumentReferenceAndData
 ) => {
@@ -148,11 +155,7 @@ export const createMockCeremony = async (
  * @param ceremonyId <string> the ceremony id
  * @param circuitId <string> the circuit id
  */
-export const cleanUpMockCeremony = async (
-    adminFirestore: FirebaseFirestore.Firestore,
-    ceremonyId: string,
-    circuitId: string
-) => {
+export const cleanUpMockCeremony = async (adminFirestore: AdminFirestore, ceremonyId: string, circuitId: string) => {
     await adminFirestore.collection(getCircuitsCollectionPath(ceremonyId)).doc(circuitId).delete()
     await adminFirestore.collection(commonTerms.collections.ceremonies.name).doc(ceremonyId).delete()
 }
@@ -162,7 +165,7 @@ export const cleanUpMockCeremony = async (
  * @param adminFirestore <FirebaseFirestore.Firestore> the admin firestore instance
  * @param ceremonyId <string> the ceremony id
  */
-export const cleanUpRecursively = async (adminFirestore: FirebaseFirestore.Firestore, ceremonyId: string) => {
+export const cleanUpRecursively = async (adminFirestore: AdminFirestore, ceremonyId: string) => {
     const collection = commonTerms.collections.ceremonies.name
     const ceremony = adminFirestore.collection(collection).doc(ceremonyId)
     await adminFirestore.recursiveDelete(ceremony)
@@ -172,7 +175,7 @@ export const cleanUpRecursively = async (adminFirestore: FirebaseFirestore.Fires
  * Clean up all mock ceremonies on Firestore (test function only)
  * @param adminFirestore <FirebaseFirestore.Firestore> the admin firestore instance
  */
-export const mockCeremoniesCleanup = async (adminFirestore: FirebaseFirestore.Firestore) => {
+export const mockCeremoniesCleanup = async (adminFirestore: AdminFirestore) => {
     const ceremonies = [
         fakeCeremoniesData.fakeCeremonyOpenedDynamic,
         fakeCeremoniesData.fakeCeremonyClosedDynamic,
@@ -194,7 +197,7 @@ export const mockCeremoniesCleanup = async (adminFirestore: FirebaseFirestore.Fi
  * @param circuitId <string> the circuit id
  */
 export const createMockContribution = async (
-    adminFirestore: FirebaseFirestore.Firestore,
+    adminFirestore: AdminFirestore,
     ceremonyId: string,
     circuitId: string,
     contribution: any,
@@ -216,7 +219,7 @@ export const createMockContribution = async (
  * @param circuitId <string> the circuit id
  */
 export const cleanUpMockContribution = async (
-    adminFirestore: FirebaseFirestore.Firestore,
+    adminFirestore: AdminFirestore,
     ceremonyId: string,
     circuitId: string,
     contributionId: string
@@ -230,7 +233,7 @@ export const cleanUpMockContribution = async (
  * @param ceremonyId <string> the ceremony id
  */
 export const createMockParticipant = async (
-    adminFirestore: FirebaseFirestore.Firestore,
+    adminFirestore: AdminFirestore,
     ceremonyId: string,
     participantId: string,
     participantData: ParticipantDocumentReferenceAndData
@@ -250,7 +253,7 @@ export const createMockParticipant = async (
  * @param participantUID <string> the participant uid
  */
 export const storeMockDoneParticipant = async (
-    adminFirestore: FirebaseFirestore.Firestore,
+    adminFirestore: AdminFirestore,
     ceremonyId: string,
     participantUID: string
 ) => {
@@ -287,7 +290,7 @@ export const storeMockDoneParticipant = async (
  * @param ceremonyId <string> the ceremony id
  */
 export const cleanUpMockParticipant = async (
-    adminFirestore: FirebaseFirestore.Firestore,
+    adminFirestore: AdminFirestore,
     ceremonyId: string,
     participantId: string
 ) => {
@@ -302,7 +305,7 @@ export const cleanUpMockParticipant = async (
  * @param circuitId <string> the circuit id
  */
 export const createMockTimedOutContribution = async (
-    adminFirestore: FirebaseFirestore.Firestore,
+    adminFirestore: AdminFirestore,
     contributorId: string,
     ceremonyId: string
 ) => {
@@ -332,11 +335,7 @@ export const createMockTimedOutContribution = async (
  * @param contributorId <string> the contributor id
  * @param ceremonyId <string> the ceremony id
  */
-export const cleanUpMockTimeout = async (
-    adminFirestore: FirebaseFirestore.Firestore,
-    contributorId: string,
-    ceremonyId: string
-) => {
+export const cleanUpMockTimeout = async (adminFirestore: AdminFirestore, contributorId: string, ceremonyId: string) => {
     const timeoutUID = "00000001"
     await adminFirestore.collection(getTimeoutsCollectionPath(ceremonyId, contributorId)).doc(timeoutUID).delete()
 }

@@ -2,6 +2,7 @@ import { google } from "googleapis"
 import { createUserWithEmailAndPassword, getAuth, UserCredential } from "firebase/auth"
 import { FirebaseApp } from "firebase/app"
 import { Auth } from "firebase-admin/auth"
+import { Firestore as AdminFirestore } from "firebase-admin/firestore"
 import { getCurrentFirebaseAuthUser } from "../../src/index"
 import { UserDocumentReferenceAndData } from "../../src/types/index"
 
@@ -153,7 +154,7 @@ export const generateUserPasswords = (numberOfUsers: number): string[] => {
  */
 export const cleanUpMockUsers = async (
     adminAuth: Auth,
-    adminFirestore: FirebaseFirestore.Firestore,
+    adminFirestore: AdminFirestore,
     users: UserDocumentReferenceAndData[]
 ): Promise<void> => {
     for (let i = 0; i < users.length; i++) {

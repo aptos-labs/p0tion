@@ -1,4 +1,4 @@
-import admin from "firebase-admin"
+import { initializeApp } from "firebase-admin/app"
 
 export { registerAuthUser, processSignUpWithCustomClaims } from "./user"
 export {
@@ -33,4 +33,4 @@ export {
 } from "./storage"
 export { checkAndRemoveBlockingContributor, resumeContributionAfterTimeoutExpiration } from "./timeout"
 
-admin.initializeApp()
+initializeApp()

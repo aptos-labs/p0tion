@@ -4,9 +4,9 @@ import {
     DocumentSnapshot,
     QueryDocumentSnapshot,
     Timestamp,
-    WhereFilterOp
+    WhereFilterOp,
+    getFirestore
 } from "firebase-admin/firestore"
-import admin from "firebase-admin"
 import dotenv from "dotenv"
 import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
@@ -50,7 +50,7 @@ export const getDocumentById = async (
     documentId: string
 ): Promise<DocumentSnapshot<DocumentData>> => {
     // Prepare Firestore db instance.
-    const firestore = admin.firestore()
+    const firestore = getFirestore()
 
     // Get document.
     const doc = await firestore.collection(collection).doc(documentId).get()
@@ -80,7 +80,7 @@ export const sleep = async (ms: number): Promise<void> => setTimeout(ms)
  */
 export const getCeremonyCircuits = async (ceremonyId: string): Promise<Array<QueryDocumentSnapshot<DocumentData>>> => {
     // Prepare Firestore db instance.
-    const firestore = admin.firestore()
+    const firestore = getFirestore()
 
     // Execute query.
     const querySnap = await firestore.collection(getCircuitsCollectionPath(ceremonyId)).get()
@@ -103,7 +103,7 @@ export const getCeremonyCircuitContributions = async (
     circuitId: string
 ): Promise<Array<QueryDocumentSnapshot<DocumentData>>> => {
     // Prepare Firestore db instance.
-    const firestore = admin.firestore()
+    const firestore = getFirestore()
 
     // Execute query.
     const querySnap = await firestore.collection(getContributionsCollectionPath(ceremonyId, circuitId)).get()
@@ -126,7 +126,7 @@ export const queryNotExpiredTimeouts = async (
     participantId: string
 ): Promise<QuerySnapshot<DocumentData>> => {
     // Prepare Firestore db.
-    const firestoreDb = admin.firestore()
+    const firestoreDb = getFirestore()
 
     // Execute and return query result.
     return firestoreDb
@@ -141,8 +141,7 @@ export const queryNotExpiredTimeouts = async (
  * @returns <Promise<Array<FirebaseDocumentInfo>>>
  */
 export const queryOpenedCeremonies = async (): Promise<Array<QueryDocumentSnapshot<DocumentData>>> => {
-    const querySnap = await admin
-        .firestore()
+    const querySnap = await getFirestore()
         .collection(commonTerms.collections.ceremonies.name)
         .where(commonTerms.collections.ceremonies.fields.state, "==", CeremonyState.OPENED)
         .where(commonTerms.collections.ceremonies.fields.endDate, ">=", getCurrentServerTimestampInMillis())
@@ -323,9 +322,8 @@ export const queryCeremoniesByStateAndDate = async (
     state: string,
     needToCheckStartDate: boolean,
     check: WhereFilterOp
-): Promise<admin.firestore.QuerySnapshot<admin.firestore.DocumentData>> =>
-    admin
-        .firestore()
+): Promise<QuerySnapshot<DocumentData>> =>
+    getFirestore()
         .collection(commonTerms.collections.ceremonies.name)
         .where(commonTerms.collections.ceremonies.fields.state, "==", state)
         .where(

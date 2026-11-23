@@ -1,4 +1,4 @@
-import * as functions from "firebase-functions"
+import * as functions from "firebase-functions/v1"
 import { FunctionsErrorCode, HttpsError } from "firebase-functions/v1/https"
 import { LogLevel } from "../types/enums"
 

@@ -3,9 +3,9 @@ import chaiAsPromised from "chai-as-promised"
 import dotenv from "dotenv"
 import fs from "fs"
 import { cwd } from "process"
-import { ethers } from "hardhat"
+import hre from "hardhat"
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
-import { Signer } from "ethers"
+import { ethers as ethersLib, Signer } from "ethers"
 import {
     cleanUpMockUsers,
     cleanUpRecursively,
@@ -71,15 +71,15 @@ describe("Smart Contract", () => {
         const inputsPath = `${cwd()}/test/data/artifacts/inputs.json`
 
         before(async () => {
-            contractFactory = await ethers.getContractFactory("Verifier")
+            contractFactory = await hre.ethers.getContractFactory("Verifier")
             mockVerifier = await contractFactory.deploy()
         })
 
         describe("Deployment", () => {
             it("should deploy the contract", async () => {
-                const factory = await ethers.getContractFactory("Verifier")
+                const factory = await hre.ethers.getContractFactory("Verifier")
                 const contract = await factory.deploy()
-                expect(ethers.utils.isAddress(contract.address)).to.be.true
+                expect(ethersLib.isAddress(await contract.getAddress())).to.be.true
             })
         })
         describe("Proof verification", () => {
@@ -183,7 +183,7 @@ describe("Smart Contract", () => {
             // * create participant
             // * create contribution
             before(async () => {
-                ;[signer] = await ethers.getSigners()
+                ;[signer] = await hre.ethers.getSigners()
 
                 for (let i = 0; i < users.length; i++) {
                     users[i].uid = await createMockUser(userApp, users[i].data.email, passwords[i], true, adminAuth)

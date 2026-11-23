@@ -1,4 +1,7 @@
-import admin from "firebase-admin"
+import { App, deleteApp, getApps, initializeApp as initializeAdminApp } from "firebase-admin/app"
+import { Auth as AdminAuth, getAuth as getAdminAuth } from "firebase-admin/auth"
+import { Firestore as AdminFirestore, getFirestore as getAdminFirestore } from "firebase-admin/firestore"
+import { getSecurityRules, SecurityRules } from "firebase-admin/security-rules"
 import dotenv from "dotenv"
 import { FirebaseApp, getApp, initializeApp } from "firebase/app"
 import { connectFirestoreEmulator, Firestore, getFirestore } from "firebase/firestore"
@@ -22,20 +25,20 @@ export const envType = process.env.NODE_ENV === "prod" ? TestingEnvironment.PROD
  * @returns <App, Firestore, Auth, SecurityRules> - the instance of the initialized admin app and services.
  */
 export const initializeAdminServices = (): {
-    adminApp: admin.app.App
-    adminFirestore: admin.firestore.Firestore
-    adminAuth: admin.auth.Auth
-    adminSecurityRules: admin.securityRules.SecurityRules
+    adminApp: App
+    adminFirestore: AdminFirestore
+    adminAuth: AdminAuth
+    adminSecurityRules: SecurityRules
 } => {
     // Init app.
-    const adminApp = admin.initializeApp({
+    const adminApp = initializeAdminApp({
         projectId: envType === TestingEnvironment.PRODUCTION ? process.env.FIREBASE_PROJECT_ID : emulatorProjectId
     })
 
     // Init services.
-    const adminFirestore = admin.firestore()
-    const adminAuth = admin.auth()
-    const adminSecurityRules = admin.securityRules()
+    const adminFirestore = getAdminFirestore(adminApp)
+    const adminAuth = getAdminAuth(adminApp)
+    const adminSecurityRules = getSecurityRules(adminApp)
 
     return {
         adminApp,
@@ -123,5 +126,5 @@ export const getAuthenticationConfiguration = (): {
  * Delete all initialized apps using the Admin SDK.
  */
 export const deleteAdminApp = async () => {
-    await Promise.all(admin.apps.map((app) => app?.delete()))
+    await Promise.all(getApps().map((app) => deleteApp(app)))
 }

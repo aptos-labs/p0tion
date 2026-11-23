@@ -1,6 +1,7 @@
-import * as functions from "firebase-functions"
+import * as functions from "firebase-functions/v1"
 import { UserRecord } from "firebase-functions/v1/auth"
-import admin from "firebase-admin"
+import { getAuth } from "firebase-admin/auth"
+import { getFirestore } from "firebase-admin/firestore"
 import dotenv from "dotenv"
 import { commonTerms, githubReputation } from "@p0tion/actions"
 import { encode } from "html-entities"
@@ -23,7 +24,7 @@ export const registerAuthUser = functions
     .auth.user()
     .onCreate(async (user: UserRecord) => {
         // Get DB.
-        const firestore = admin.firestore()
+        const firestore = getFirestore()
         // Get user information.
         if (!user.uid) logAndThrowError(SPECIFIC_ERRORS.SE_AUTH_NO_CURRENT_AUTH_USER)
         // The user object has basic properties such as display name, email, etc.
@@ -53,7 +54,7 @@ export const registerAuthUser = functions
                 email === process.env.CUSTOM_CLAIMS_COORDINATOR_EMAIL_ADDRESS_OR_DOMAIN
             )
         ) {
-            const auth = admin.auth()
+            const auth = getAuth()
             // if provider == github.com let's use our functions to check the user's reputation
             if (user.providerData[0].providerId === "github.com") {
                 const vars = getGitHubVariables()
@@ -158,7 +159,7 @@ export const processSignUpWithCustomClaims = functions
         }
         try {
             // Set custom user claims on this newly created user.
-            await admin.auth().setCustomUserClaims(user.uid, customClaims)
+            await getAuth().setCustomUserClaims(user.uid, customClaims)
         } catch (error: any) {
             const specificError = SPECIFIC_ERRORS.SE_AUTH_SET_CUSTOM_USER_CLAIMS_FAIL
             const additionalDetails = error.toString()

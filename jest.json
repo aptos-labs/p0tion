@@ -1,5 +1,6 @@
 {
     "testPathIgnorePatterns": [".d.ts", ".js", "packages/actions/test/unit/contract.test.ts"],
+    "transformIgnorePatterns": ["/node_modules/(?!(jose|@octokit)/)"],
     "moduleNameMapper": {
         "@p0tion/(.*)$": "<rootDir>/packages/$1"
     },
