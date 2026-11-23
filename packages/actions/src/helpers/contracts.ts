@@ -121,8 +121,8 @@ export const deployVerifierContract = async (contractPath: string, signer: Signe
     const compiledContract = await compileContract(contractPath)
     // connect to hardhat node running locally
     const contractFactory = new ContractFactory(compiledContract.abi, compiledContract.evm.bytecode.object, signer)
-    const contract = await contractFactory.deploy()
-    await contract.deployed()
+    const contract = (await contractFactory.deploy()) as Contract
+    await contract.waitForDeployment()
     return contract
 }
 

@@ -1,12 +1,11 @@
 import * as functionsV1 from "firebase-functions/v1"
 import * as functionsV2 from "firebase-functions/v2"
-import admin from "firebase-admin"
 import dotenv from "dotenv"
 import { QueryDocumentSnapshot } from "firebase-functions/v1/firestore"
 import { Change } from "firebase-functions"
 import fs from "fs"
 import { Timer } from "timer-node"
-import { FieldValue } from "firebase-admin/firestore"
+import { FieldValue, getFirestore } from "firebase-admin/firestore"
 import {
     commonTerms,
     getParticipantsCollectionPath,
@@ -81,7 +80,7 @@ const coordinate = async (
     ceremonyId?: string
 ) => {
     // Prepare db and transactions batch.
-    const firestore = admin.firestore()
+    const firestore = getFirestore()
     const batch = firestore.batch()
 
     // Extract data.
@@ -487,7 +486,7 @@ export const verifycontribution = functionsV2.https.onCall(
         verifyContributionTimer.start()
 
         // Get DB.
-        const firestore = admin.firestore()
+        const firestore = getFirestore()
         // Prepare batch of txs.
         const batch = firestore.batch()
 
@@ -890,7 +889,7 @@ export const refreshParticipantAfterContributionVerification = functionsV1
     )
     .onCreate(async (createdContribution: QueryDocumentSnapshot) => {
         // Prepare db.
-        const firestore = admin.firestore()
+        const firestore = getFirestore()
         // Prepare batch of txs.
         const batch = firestore.batch()
 

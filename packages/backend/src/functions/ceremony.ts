@@ -1,5 +1,5 @@
-import * as functions from "firebase-functions"
-import admin from "firebase-admin"
+import * as functions from "firebase-functions/v1"
+import { getFirestore } from "firebase-admin/firestore"
 import dotenv from "dotenv"
 import { DocumentSnapshot, QueryDocumentSnapshot } from "firebase-functions/v1/firestore"
 import {
@@ -107,7 +107,7 @@ export const setupCeremony = functions
             logAndThrowError(COMMON_ERRORS.CM_MISSING_OR_WRONG_INPUT_DATA)
 
         // Prepare Firestore DB.
-        const firestore = admin.firestore()
+        const firestore = getFirestore()
         const batch = firestore.batch()
 
         // Prepare data.
@@ -235,7 +235,7 @@ export const initEmptyWaitingQueueForCircuit = functions
     )
     .onCreate(async (doc: QueryDocumentSnapshot) => {
         // Prepare Firestore DB.
-        const firestore = admin.firestore()
+        const firestore = getFirestore()
 
         // Get circuit document identifier and data.
         const circuitId = doc.id
@@ -281,7 +281,7 @@ export const finalizeCeremony = functions
         if (!data.ceremonyId) logAndThrowError(COMMON_ERRORS.CM_MISSING_OR_WRONG_INPUT_DATA)
 
         // Prepare Firestore DB.
-        const firestore = admin.firestore()
+        const firestore = getFirestore()
         const batch = firestore.batch()
 
         // Extract data.

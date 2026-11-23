@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-import { createOAuthDeviceAuth } from "@octokit/auth-oauth-device"
-import { Verification } from "@octokit/auth-oauth-device/dist-types/types.js"
+import { createOAuthDeviceAuth, OAuthAppStrategyOptions } from "@octokit/auth-oauth-device"
 import clipboard from "clipboardy"
 import dotenv from "dotenv"
 import open from "open"
@@ -56,6 +55,8 @@ export const expirationCountdownForGithubOAuth = (expirationInSeconds: number) =
         }
     }, interval * 1000) // ms.
 }
+
+type Verification = Parameters<OAuthAppStrategyOptions["onVerification"]>[0]
 
 /**
  * Callback to manage the data requested for Github OAuth2.0 device flow.

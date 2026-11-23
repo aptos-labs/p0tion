@@ -1,6 +1,6 @@
 import chai from "chai"
 import chaiAsPromised from "chai-as-promised"
-import admin from "firebase-admin"
+import { getFirestore } from "firebase-admin/firestore"
 import firebaseFncTest from "firebase-functions-test"
 // Import the exported function definitions from our functions/index.js file
 import { registerAuthUser } from "../src/functions/index"
@@ -28,7 +28,7 @@ describe("CF Unit Tests", () => {
 
     afterAll(async () => {
         // Remove user record.
-        await admin.firestore().collection("users").doc(userId).delete()
+        await getFirestore().collection("users").doc(userId).delete()
 
         test.cleanup()
     })
@@ -52,7 +52,7 @@ describe("CF Unit Tests", () => {
         await wrapped(user)
 
         // Check the data was written to the Firestore emulator
-        const snap = await admin.firestore().collection("users").doc(userId).get()
+        const snap = await getFirestore().collection("users").doc(userId).get()
         const data = snap.data()
 
         assert.propertyVal(data, "name", displayName)

@@ -1,5 +1,4 @@
-import * as functions from "firebase-functions"
-import admin from "firebase-admin"
+import * as functions from "firebase-functions/v1"
 import dotenv from "dotenv"
 import {
     ParticipantDocument,
@@ -9,7 +8,7 @@ import {
     getParticipantsCollectionPath,
     commonTerms
 } from "@p0tion/actions"
-import { FieldValue } from "firebase-admin/firestore"
+import { FieldValue, getFirestore } from "firebase-admin/firestore"
 import {
     PermanentlyStoreCurrentContributionTimeAndHash,
     TemporaryStoreCurrentContributionMultiPartUploadId,
@@ -55,7 +54,7 @@ export const checkParticipantForCeremony = functions
         if (!data.ceremonyId) logAndThrowError(COMMON_ERRORS.CM_MISSING_OR_WRONG_INPUT_DATA)
 
         // Prepare Firestore DB.
-        const firestore = admin.firestore()
+        const firestore = getFirestore()
 
         // Get data.
         const { ceremonyId } = data

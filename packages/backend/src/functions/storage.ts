@@ -1,5 +1,5 @@
-import * as functions from "firebase-functions"
-import admin from "firebase-admin"
+import * as functions from "firebase-functions/v1"
+import { getFirestore } from "firebase-admin/firestore"
 import {
     GetObjectCommand,
     CreateMultipartUploadCommand,
@@ -113,7 +113,7 @@ const checkUploadingFileValidity = async (contributorId: string, ceremonyId: str
  */
 const checkIfBucketIsDedicatedToCeremony = async (bucketName: string) => {
     // Get Firestore DB.
-    const firestoreDatabase = admin.firestore()
+    const firestoreDatabase = getFirestore()
 
     // Extract ceremony prefix from bucket name.
     const ceremonyPrefix = bucketName.replace(String(process.env.AWS_CEREMONY_BUCKET_POSTFIX), "")

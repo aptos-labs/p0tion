@@ -1,5 +1,5 @@
-import * as functions from "firebase-functions"
-import admin from "firebase-admin"
+import * as functions from "firebase-functions/v1"
+import { getFirestore } from "firebase-admin/firestore"
 import dotenv from "dotenv"
 import {
     CeremonyTimeoutType,
@@ -47,7 +47,7 @@ export const checkAndRemoveBlockingContributor = functions
     .pubsub.schedule("every 1 minutes")
     .onRun(async () => {
         // Prepare Firestore DB.
-        const firestore = admin.firestore()
+        const firestore = getFirestore()
         // Get current server timestamp in milliseconds.
         const currentServerTimestamp = getCurrentServerTimestampInMillis()
 

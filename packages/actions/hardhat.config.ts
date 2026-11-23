@@ -1,4 +1,4 @@
-import "@nomiclabs/hardhat-ethers"
+import "@nomicfoundation/hardhat-ethers"
 import "./src/helpers/tasks"
 import { HardhatUserConfig } from "hardhat/types/index"
 
